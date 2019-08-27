@@ -1,0 +1,16 @@
+{
+    "cSpell.words": [
+        "downlevel",
+        "esnext",
+        "interop",
+        "postwick",
+        "sourcemap",
+        "tslib",
+        "typechecking"
+    ],
+    "eslint.autoFixOnSave": true,
+    "eslint.validate": [
+        "javascript",
+        { "language": "typescript", "autoFix": true }
+    ]
+}
