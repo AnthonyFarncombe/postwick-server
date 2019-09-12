@@ -5,6 +5,7 @@ mongoose.connect(process.env.MONGODB_ADDR || 'mongodb://127.0.0.1:27017/postwick
   useNewUrlParser: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
+  useCreateIndex: true,
 });
 
 const db = mongoose.connection;

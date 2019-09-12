@@ -1,15 +1,25 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface User extends Document {
+export interface UserType extends Document {
   firstName: string;
   lastName: string;
   email: string;
+  passwordHash: string;
+  roles: string[];
+  resetToken: string;
+  resetExpires: Date;
 }
 
-const UserSchema: Schema = new Schema({
+const userSchema: Schema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
+  passwordHash: { type: String },
+  roles: [String],
+  resetToken: String,
+  resetExpires: Date,
 });
 
-export default mongoose.model<User>('User', UserSchema);
+userSchema.index({ email: 1 }, { unique: true });
+
+export default mongoose.model<UserType>('User', userSchema);

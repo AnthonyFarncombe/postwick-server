@@ -1,9 +1,12 @@
 {
     "cSpell.words": [
         "downlevel",
+        "errmsg",
         "esnext",
         "interop",
         "postwick",
+        "sendmail",
+        "smtp",
         "sourcemap",
         "tslib",
         "typechecking"
