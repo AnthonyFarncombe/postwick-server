@@ -1,30 +1,47 @@
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
+import { Request } from 'express';
 
-export interface JwtData {
-  exp: number;
+export interface UserContext {
   userId: string;
-  email: string;
   roles: string[];
+}
+
+export interface JwtPayload extends UserContext {
+  iat?: number;
+  exp?: number;
   ip: string;
 }
 
-export function getUserFromToken(bearerHeader: string): Promise<string | object> {
+export function getUserFromRequest(req: Request): Promise<UserContext> {
   return new Promise((resolve, reject): void => {
     try {
+      const bearerHeader = req.headers.authorization || '';
+
       if (!bearerHeader || typeof bearerHeader !== 'string') return reject();
       const bearer = bearerHeader.split(' ');
       const bearerToken = bearer[1];
 
-      jwt.verify(bearerToken, process.env.JWT_SECRET || 'secret', (err, decoded) => {
+      const publicKey = fs.readFileSync(path.resolve(__dirname, '../public.key'), 'utf8');
+      if (!publicKey) throw new Error('Public key not found!');
+
+      jwt.verify(bearerToken, publicKey, (err, decoded) => {
         if (err) return reject(err);
 
-        const jwtData = decoded as JwtData;
+        const payload = decoded as JwtPayload;
 
-        if (decoded && jwtData.exp && Date.now() < jwtData.exp * 1000) {
-          resolve(decoded);
-        } else {
-          reject(new Error('JWT token has expired!'));
-        }
+        if (!payload || !payload.exp || Date.now() >= payload.exp * 1000)
+          return reject(new Error('JWT token has expired!'));
+
+        if (payload.ip !== req.connection.remoteAddress) return reject('IP address does not match!');
+
+        const userContext: UserContext = {
+          userId: payload.userId,
+          roles: payload.roles,
+        };
+
+        resolve(userContext);
       });
     } catch (err) {
       return reject(err);

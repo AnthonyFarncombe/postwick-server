@@ -4,9 +4,11 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import moment from 'moment';
 import handlebars from 'handlebars';
+import fs from 'fs';
+import path from 'path';
 import { isDate } from 'lodash';
 import User from '../models/user';
-import { JwtData } from '../auth';
+import { JwtPayload } from '../auth';
 import { sendMail } from '../email';
 
 const authResolvers: IResolvers = {
@@ -14,7 +16,7 @@ const authResolvers: IResolvers = {
     async login(
       _parent,
       { email, password }: { email: string; password: string },
-      context: JwtData,
+      context: JwtPayload,
     ): Promise<{ userId: string; token: string; tokenExpiration: number }> {
       try {
         const user = await User.findOne({ email });
@@ -22,20 +24,22 @@ const authResolvers: IResolvers = {
 
         const isEqual = await bcrypt.compare(password, user.passwordHash || '');
         if (!isEqual) throw new AuthenticationError('Email or password is incorrect!');
-        const token = jwt.sign(
-          {
-            userId: user.id,
-            email: user.email,
-            roles: user.roles || [],
-            ip: context.ip,
-          },
-          process.env.JWT_SECRET || 'SomeSuperSecretKey',
-          {
-            expiresIn: '1h',
-          },
-        );
 
-        return { userId: user.id, token, tokenExpiration: 1 };
+        const payload: JwtPayload = {
+          userId: user.id,
+          roles: user.roles || [],
+          ip: context.ip,
+        };
+
+        const privateKey = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8');
+        if (!privateKey) throw new Error('Private key not found!');
+
+        const token = jwt.sign(payload, privateKey, {
+          expiresIn: '12h',
+          algorithm: 'RS256',
+        });
+
+        return { userId: user.id, token, tokenExpiration: 12 };
       } catch (err) {
         if (err instanceof ApolloError) throw err;
 
@@ -97,9 +101,9 @@ const authResolvers: IResolvers = {
           throw new ValidationError('Password does not meet complexity requirements!');
         }
 
-        const hash = await bcrypt.hash(password, 10);
+        const passwordHash = await bcrypt.hash(password, 10);
         await User.findByIdAndUpdate(user._id, {
-          $set: { password: hash, resetToken: null, resetExpires: null },
+          $set: { passwordHash, resetToken: null, resetExpires: null },
         });
 
         return true;
