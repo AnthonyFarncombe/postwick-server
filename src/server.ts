@@ -7,9 +7,6 @@ import { getUserFromRequest, UserContext } from './auth';
 import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 
-import authRouter from './routes/auth';
-import usersRouter from './routes/users';
-
 export type ApolloContext = { ip: string | undefined; user: UserContext | undefined };
 
 const server = new ApolloServer({
@@ -26,16 +23,10 @@ const server = new ApolloServer({
 
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 server.applyMiddleware({ app });
 
-app.use('/auth', authRouter);
-app.use('/users', usersRouter);
-
 app.get('/', (_req, res) => {
-  res.json({ hello: 'World' });
+  res.json({ hello: 'world' });
 });
 
 const port = process.env.PORT && typeof process.env.PORT === 'number' ? parseInt(process.env.PORT) : 3000;
