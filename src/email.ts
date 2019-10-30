@@ -1,13 +1,13 @@
-import fs from 'fs';
-import nodemailer from 'nodemailer';
-import handlebars from 'handlebars';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import SendmailTransport from 'nodemailer/lib/sendmail-transport';
+import fs from "fs";
+import nodemailer from "nodemailer";
+import handlebars from "handlebars";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
+import SendmailTransport from "nodemailer/lib/sendmail-transport";
 
 const smtpTransport: SMTPTransport.Options = {
   host: process.env.EMAIL_HOST,
-  port: parseInt(process.env.EMAIL_PORT || '25'),
-  secure: process.env.EMAIL_SSL === 'true',
+  port: parseInt(process.env.EMAIL_PORT || "25"),
+  secure: process.env.EMAIL_SSL === "true",
 };
 
 const options: SendmailTransport.Options = {
@@ -30,7 +30,7 @@ export async function sendMail({
   context: any;
 }): Promise<void> {
   const source = await new Promise((resolve, reject): void => {
-    fs.readFile(`./src/templates/${template}.hbs`, 'utf8', (err, data) => {
+    fs.readFile(`./src/templates/${template}.hbs`, "utf8", (err, data) => {
       if (err) reject(err);
       else resolve(data);
     });

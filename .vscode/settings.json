@@ -3,17 +3,23 @@
         "downlevel",
         "errmsg",
         "esnext",
+        "heathwood",
         "interop",
+        "mongodb",
+        "noreply",
         "postwick",
         "sendmail",
         "smtp",
         "sourcemap",
         "tslib",
-        "typechecking"
+        "typechecking",
+        "zjov"
     ],
     "eslint.autoFixOnSave": true,
     "eslint.validate": [
         "javascript",
-        { "language": "typescript", "autoFix": true }
-    ]
+        { "language": "typescript", "autoFix": true },
+        { "language": "json", "autoFix": true }
+    ],
+    "editor.tabSize": 2
 }

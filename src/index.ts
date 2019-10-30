@@ -1,5 +1,6 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
-import './mongoose';
-import './server';
+import "./mongoose";
+import "./server";
+import "./plc";

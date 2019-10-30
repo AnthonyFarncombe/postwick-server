@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 export interface UserType extends Document {
   firstName: string;
@@ -22,4 +22,4 @@ const userSchema: Schema = new Schema({
 
 userSchema.index({ email: 1 }, { unique: true });
 
-export default mongoose.model<UserType>('User', userSchema);
+export default mongoose.model<UserType>("User", userSchema);

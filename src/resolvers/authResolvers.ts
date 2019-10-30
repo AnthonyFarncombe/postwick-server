@@ -1,15 +1,15 @@
-import { IResolvers, ApolloError, AuthenticationError, ValidationError } from 'apollo-server-express';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
-import moment from 'moment';
-import handlebars from 'handlebars';
-import fs from 'fs';
-import path from 'path';
-import { isDate } from 'lodash';
-import User from '../models/user';
-import { JwtPayload } from '../auth';
-import { sendMail } from '../email';
+import { IResolvers, ApolloError, AuthenticationError, ValidationError } from "apollo-server-express";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import moment from "moment";
+import handlebars from "handlebars";
+import fs from "fs";
+import path from "path";
+import { isDate } from "lodash";
+import User from "../models/user";
+import { JwtPayload } from "../auth";
+import { sendMail } from "../email";
 
 const authResolvers: IResolvers = {
   Mutation: {
@@ -20,10 +20,10 @@ const authResolvers: IResolvers = {
     ): Promise<{ userId: string; token: string; tokenExpiration: number }> {
       try {
         const user = await User.findOne({ email });
-        if (!user) throw new AuthenticationError('Email or password is incorrect!');
+        if (!user) throw new AuthenticationError("Email or password is incorrect!");
 
-        const isEqual = await bcrypt.compare(password, user.passwordHash || '');
-        if (!isEqual) throw new AuthenticationError('Email or password is incorrect!');
+        const isEqual = await bcrypt.compare(password, user.passwordHash || "");
+        if (!isEqual) throw new AuthenticationError("Email or password is incorrect!");
 
         const payload: JwtPayload = {
           userId: user.id,
@@ -31,12 +31,12 @@ const authResolvers: IResolvers = {
           ip: context.ip,
         };
 
-        const privateKey = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8');
-        if (!privateKey) throw new Error('Private key not found!');
+        const privateKey = fs.readFileSync(path.resolve(__dirname, "../../private.key"), "utf8");
+        if (!privateKey) throw new Error("Private key not found!");
 
         const token = jwt.sign(payload, privateKey, {
-          expiresIn: '12h',
-          algorithm: 'RS256',
+          expiresIn: "12h",
+          algorithm: "RS256",
         });
 
         return { userId: user.id, token, tokenExpiration: 12 };
@@ -44,7 +44,7 @@ const authResolvers: IResolvers = {
         if (err instanceof ApolloError) throw err;
 
         console.error(err);
-        throw new ApolloError('An error has occurred!');
+        throw new ApolloError("An error has occurred!");
       }
     },
     async forgotPassword(_parent, { email, url }: { email: string; url: string }): Promise<boolean> {
@@ -53,17 +53,17 @@ const authResolvers: IResolvers = {
         if (!user) return true;
 
         const buffer = crypto.randomBytes(20);
-        const token = buffer.toString('hex');
+        const token = buffer.toString("hex");
         const expires = moment()
-          .add(30, 'minute')
+          .add(30, "minute")
           .toDate();
 
         await User.findByIdAndUpdate({ _id: user._id }, { $set: { resetToken: token, resetExpires: expires } });
 
         sendMail({
           to: user.email,
-          template: 'forgot-password',
-          subject: 'Reset Password',
+          template: "forgot-password",
+          subject: "Reset Password",
           context: {
             url: handlebars.compile(url)({ token }),
             name: user.firstName,
@@ -73,7 +73,7 @@ const authResolvers: IResolvers = {
         return !!token;
       } catch (err) {
         console.error(err);
-        throw new ApolloError('An error has occurred');
+        throw new ApolloError("An error has occurred");
       }
     },
     async resetPassword(
@@ -83,22 +83,22 @@ const authResolvers: IResolvers = {
       try {
         const user = await User.findOne({ resetToken: token });
         if (!user) {
-          throw new ValidationError('Cannot find user!');
+          throw new ValidationError("Cannot find user!");
         }
 
         if (user.email !== email) {
-          throw new ValidationError('Email address does not match!');
+          throw new ValidationError("Email address does not match!");
         }
 
-        let expires = moment('1900-01-01');
+        let expires = moment("1900-01-01");
         if (isDate(user.resetExpires)) expires = moment(user.resetExpires);
         if (moment.duration(expires.diff(moment())).minutes() < 0) {
-          throw new ValidationError('Token has expired');
+          throw new ValidationError("Token has expired");
         }
 
         const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
-        if (!strongRegex.test(password || '')) {
-          throw new ValidationError('Password does not meet complexity requirements!');
+        if (!strongRegex.test(password || "")) {
+          throw new ValidationError("Password does not meet complexity requirements!");
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
@@ -112,7 +112,7 @@ const authResolvers: IResolvers = {
           throw err;
         } else {
           console.error(err);
-          throw new ApolloError('An error has occurred');
+          throw new ApolloError("An error has occurred");
         }
       }
     },

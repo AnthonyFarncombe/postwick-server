@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
-import fs from 'fs';
-import path from 'path';
-import { Request } from 'express';
+import jwt from "jsonwebtoken";
+import fs from "fs";
+import path from "path";
+import { Request } from "express";
 
 export interface UserContext {
   userId: string;
@@ -17,14 +17,14 @@ export interface JwtPayload extends UserContext {
 export function getUserFromRequest(req: Request): Promise<UserContext> {
   return new Promise((resolve, reject): void => {
     try {
-      const bearerHeader = req.headers.authorization || '';
+      const bearerHeader = req.headers.authorization || "";
 
-      if (!bearerHeader || typeof bearerHeader !== 'string') return reject();
-      const bearer = bearerHeader.split(' ');
+      if (!bearerHeader || typeof bearerHeader !== "string") return reject();
+      const bearer = bearerHeader.split(" ");
       const bearerToken = bearer[1];
 
-      const publicKey = fs.readFileSync(path.resolve(__dirname, '../public.key'), 'utf8');
-      if (!publicKey) throw new Error('Public key not found!');
+      const publicKey = fs.readFileSync(path.resolve(__dirname, "../public.key"), "utf8");
+      if (!publicKey) throw new Error("Public key not found!");
 
       jwt.verify(bearerToken, publicKey, (err, decoded) => {
         if (err) return reject(err);
@@ -32,9 +32,9 @@ export function getUserFromRequest(req: Request): Promise<UserContext> {
         const payload = decoded as JwtPayload;
 
         if (!payload || !payload.exp || Date.now() >= payload.exp * 1000)
-          return reject(new Error('JWT token has expired!'));
+          return reject(new Error("JWT token has expired!"));
 
-        if (payload.ip !== req.connection.remoteAddress) return reject('IP address does not match!');
+        if (payload.ip !== req.connection.remoteAddress) return reject("IP address does not match!");
 
         const userContext: UserContext = {
           userId: payload.userId,
