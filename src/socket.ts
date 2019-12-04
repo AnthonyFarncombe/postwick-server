@@ -2,6 +2,7 @@ import socket from "socket.io";
 import { Server } from "http";
 import chalk from "chalk";
 import store, { Variable } from "./store";
+import Event from "./models/event";
 
 interface Session {
   socket: socket.Socket;
@@ -25,6 +26,17 @@ export default (http: Server): void => {
 
     socket.on("getVariables", (_data: object, fn: Function) => {
       fn && fn(store.variables);
+    });
+
+    socket.on("getEvents", (_data: object, fn: Function) => {
+      Event.find((err, res) => {
+        if (err) {
+          console.log(chalk.red("Error loading events"));
+          fn && fn([]);
+        } else {
+          fn && fn(res);
+        }
+      });
     });
 
     socket.on("disconnect", () => {

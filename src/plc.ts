@@ -7,7 +7,11 @@ const port = parseInt(process.env.PLC_PORT || "0");
 
 const client = new net.Socket();
 
-if (!process.env.PLC_DISABLE) client.connect({ host, port });
+if (process.env.PLC_DISABLE === "TRUE") {
+  console.log(chalk.magentaBright("PLC Disabled"));
+} else {
+  client.connect({ host, port });
+}
 
 client.on("connect", () => {
   console.log(chalk.green("Connected to PLC"));
