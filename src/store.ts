@@ -6,6 +6,12 @@ export interface Variable {
   name: string;
   plc?: "read" | "write";
   value: boolean | number;
+  modbus?: {
+    type: "boolean" | "int16";
+    action: "read" | "write";
+    address: number;
+    bit?: number;
+  };
 }
 
 export const variables: Variable[] = [];

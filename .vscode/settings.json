@@ -5,6 +5,7 @@
         "esnext",
         "heathwood",
         "interop",
+        "modbus",
         "mongodb",
         "noreply",
         "postwick",
@@ -15,11 +16,8 @@
         "typechecking",
         "zjov"
     ],
-    "eslint.autoFixOnSave": true,
-    "eslint.validate": [
-        "javascript",
-        { "language": "typescript", "autoFix": true },
-        { "language": "json", "autoFix": true }
-    ],
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
 }

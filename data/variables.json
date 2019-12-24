@@ -1,22 +1,91 @@
 [
   {
     "name": "mainHallLights1Value",
-    "value": false
+    "value": false,
+    "group": "lights",
+    "modbus": {
+      "type": "boolean",
+      "action": "read",
+      "address": 105,
+      "bit": 0
+    }
   },
   {
     "name": "mainHallLights2Value",
-    "value": false
+    "value": false,
+    "group": "lights"
   },
   {
     "name": "mainHallLights3Value",
-    "value": false
+    "value": false,
+    "group": "lights"
   },
   {
     "name": "mainHallLights4Value",
-    "value": false
+    "value": false,
+    "group": "lights"
   },
   {
     "name": "mainHallLights5Value",
-    "value": false
+    "value": false,
+    "group": "lights"
+  },
+  {
+    "name": "supplyAirTemperatureSensor1",
+    "text": "Supply Air 1",
+    "value": 0,
+    "group": "temperatureSensors"
+  },
+  {
+    "name": "supplyAirTemperatureSensor2",
+    "text": "Supply Air 2",
+    "value": 0,
+    "group": "temperatureSensors"
+  },
+  {
+    "name": "supplyAirTemperatureSensor3",
+    "text": "Supply Air 3",
+    "value": 0,
+    "group": "temperatureSensors"
+  },
+  {
+    "name": "returnAirTemperatureA",
+    "text": "Return Air Temperature A",
+    "value": 0,
+    "modbus": {
+      "type": "int16",
+      "action": "read",
+      "address": 100
+    }
+  },
+  {
+    "name": "returnAirTemperatureB",
+    "text": "Return Air Temperature B",
+    "value": 0,
+    "modbus": {
+      "type": "int16",
+      "action": "read",
+      "address": 101
+    }
+  },
+  {
+    "name": "returnAirTemperatureC",
+    "text": "Return Air Temperature C",
+    "value": 0,
+    "modbus": {
+      "type": "int16",
+      "action": "read",
+      "address": 102
+    }
+  },
+  {
+    "name": "returnAirTemperatureD",
+    "text": "Return Air Temperature D",
+    "value": 0,
+    "modbus": {
+      "type": "int16",
+      "action": "read",
+      "address": 103
+    }
   }
 ]
