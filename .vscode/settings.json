@@ -1,13 +1,17 @@
 {
     "cSpell.words": [
+        "backoff",
         "downlevel",
         "errmsg",
         "esnext",
+        "exceptionserver",
         "heathwood",
         "interop",
+        "keepalive",
         "modbus",
         "mongodb",
         "noreply",
+        "opcua",
         "postwick",
         "sendmail",
         "smtp",

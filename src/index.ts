@@ -4,4 +4,5 @@ dotenv.config();
 // import "./mongoose";
 import "./server";
 // import "./plc";
-import "./modbus";
+// import "./modbus";
+import "./opcua";
