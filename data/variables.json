@@ -1,91 +1,299 @@
 [
   {
-    "name": "mainHallLights1Value",
-    "value": false,
-    "group": "lights",
-    "modbus": {
-      "type": "boolean",
+    "name": "mainHallTemperatureSensor",
+    "text": "Main Hall Temperature",
+    "value": 0,
+    "group": "temperatureSensors",
+    "plc": {
+      "type": "int16",
       "action": "read",
-      "address": 105,
-      "bit": 0
+      "byte": 2
     }
   },
   {
-    "name": "mainHallLights2Value",
-    "value": false,
-    "group": "lights"
+    "name": "returnAirATemperatureSensor",
+    "text": "Return Air A Temperature",
+    "value": 0,
+    "group": "temperatureSensors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 4
+    }
   },
   {
-    "name": "mainHallLights3Value",
-    "value": false,
-    "group": "lights"
+    "name": "returnAirTemperatureB",
+    "text": "Return Air B Temperature",
+    "value": 0,
+    "group": "temperatureSensors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 6
+    }
   },
   {
-    "name": "mainHallLights4Value",
-    "value": false,
-    "group": "lights"
+    "name": "returnAirTemperatureC",
+    "text": "Return Air C Temperature",
+    "value": 0,
+    "group": "temperatureSensors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 8
+    }
   },
   {
-    "name": "mainHallLights5Value",
-    "value": false,
-    "group": "lights"
+    "name": "returnAirTemperatureD",
+    "text": "Return Air D Temperature",
+    "value": 0,
+    "group": "temperatureSensors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 10
+    }
   },
   {
     "name": "supplyAirTemperatureSensor1",
     "text": "Supply Air 1",
     "value": 0,
-    "group": "temperatureSensors"
+    "group": "temperatureSensors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 12
+    }
   },
   {
     "name": "supplyAirTemperatureSensor2",
     "text": "Supply Air 2",
     "value": 0,
-    "group": "temperatureSensors"
+    "group": "temperatureSensors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 14
+    }
   },
   {
     "name": "supplyAirTemperatureSensor3",
     "text": "Supply Air 3",
     "value": 0,
-    "group": "temperatureSensors"
-  },
-  {
-    "name": "returnAirTemperatureA",
-    "text": "Return Air Temperature A",
-    "value": 0,
-    "modbus": {
+    "group": "temperatureSensors",
+    "plc": {
       "type": "int16",
       "action": "read",
-      "address": 100
+      "byte": 16
     }
   },
   {
-    "name": "returnAirTemperatureB",
-    "text": "Return Air Temperature B",
+    "name": "outsideTemperatureSensor",
+    "text": "Outside Temperature",
     "value": 0,
-    "modbus": {
+    "group": "temperatureSensors",
+    "plc": {
       "type": "int16",
       "action": "read",
-      "address": 101
+      "byte": 18
     }
   },
   {
-    "name": "returnAirTemperatureC",
-    "text": "Return Air Temperature C",
+    "name": "controlCabinetTemperatureSensor",
+    "text": "Control Cabinet Temperature",
     "value": 0,
-    "modbus": {
+    "group": "temperatureSensors",
+    "plc": {
       "type": "int16",
       "action": "read",
-      "address": 102
+      "byte": 20
     }
   },
   {
-    "name": "returnAirTemperatureD",
-    "text": "Return Air Temperature D",
-    "value": 0,
-    "modbus": {
-      "type": "int16",
+    "name": "mainHallLightsToggle",
+    "text": "Main Hall Lights",
+    "group": "Lights",
+    "value": false,
+    "toggle": 1000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 2,
+      "bit": 0
+    }
+  },
+  {
+    "name": "mainHallLightsStatus",
+    "text": "Main Hall Lights",
+    "group": "Lights",
+    "value": false,
+    "plc": {
+      "type": "bool",
       "action": "read",
-      "address": 103
+      "byte": 22,
+      "bit": 0
+    }
+  },
+  {
+    "name": "mainHallLightsPhasing",
+    "text": "Main Hall Lights",
+    "group": "Lights",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 22,
+      "bit": 1
+    }
+  },
+  {
+    "name": "mainFoyerLightsToggle",
+    "text": "Main Foyer Lights",
+    "group": "Lights",
+    "value": false,
+    "toggle": 1000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 2,
+      "bit": 1
+    }
+  },
+  {
+    "name": "mainFoyerLightsStatus",
+    "text": "Main Foyer Lights",
+    "group": "Lights",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 22,
+      "bit": 2
+    }
+  },
+  {
+    "name": "southFoyerLightsToggle",
+    "text": "South Foyer Lights",
+    "group": "Lights",
+    "value": false,
+    "toggle": 1000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 2,
+      "bit": 2
+    }
+  },
+  {
+    "name": "southFoyerLightsStatus",
+    "text": "South Foyer Lights",
+    "group": "Lights",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 22,
+      "bit": 3
+    }
+  },
+  {
+    "name": "northFoyerLightsToggle",
+    "text": "North Foyer Lights",
+    "group": "Lights",
+    "value": false,
+    "toggle": 1000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 2,
+      "bit": 3
+    }
+  },
+  {
+    "name": "northFoyerLightsStatus",
+    "text": "North Foyer Lights",
+    "group": "Lights",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 22,
+      "bit": 4
+    }
+  },
+  {
+    "name": "toiletLightsToggle",
+    "text": "Toilet Lights",
+    "group": "Lights",
+    "value": false,
+    "toggle": 1000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 2,
+      "bit": 4
+    }
+  },
+  {
+    "name": "toiletLightsStatus",
+    "text": "Toilet Lights",
+    "group": "Lights",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 22,
+      "bit": 5
+    }
+  },
+  {
+    "name": "rearCorridorLightsToggle",
+    "text": "Rear Corridor Lights",
+    "group": "Lights",
+    "value": false,
+    "toggle": 1000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 2,
+      "bit": 5
+    }
+  },
+  {
+    "name": "rearCorridorLightsStatus",
+    "text": "Rear Corridor Lights",
+    "group": "Lights",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 22,
+      "bit": 6
+    }
+  },
+  {
+    "name": "plantRoomLightsToggle",
+    "text": "Plant Room Lights",
+    "group": "Lights",
+    "value": false,
+    "toggle": 1000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 2,
+      "bit": 6
+    }
+  },
+  {
+    "name": "plantRoomLightsStatus",
+    "text": "Plant Room Lights",
+    "group": "Lights",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 22,
+      "bit": 7
     }
   }
 ]

@@ -9,5 +9,7 @@ export default gql`
     createUser(user: CreateUserInput): User!
     updateUser(user: UpdateUserInput): User!
     deleteUser(id: ID!): ID!
+
+    setVariableValue(name: String!, value: Int!): Boolean!
   }
 `;

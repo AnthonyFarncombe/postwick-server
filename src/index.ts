@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-// import "./mongoose";
 import "./server";
-// import "./plc";
-// import "./modbus";
-import "./opcua";
+import { load as loadStore } from "./store";
+import { connect as connectPlc } from "./plc";
+
+(async (): Promise<void> => {
+  await loadStore();
+  connectPlc();
+})();
