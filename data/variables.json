@@ -112,7 +112,7 @@
   {
     "name": "mainHallLightsToggle",
     "text": "Main Hall Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "toggle": 1000,
     "plc": {
@@ -125,7 +125,7 @@
   {
     "name": "mainHallLightsStatus",
     "text": "Main Hall Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "plc": {
       "type": "bool",
@@ -137,7 +137,7 @@
   {
     "name": "mainHallLightsPhasing",
     "text": "Main Hall Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "plc": {
       "type": "bool",
@@ -149,7 +149,7 @@
   {
     "name": "mainFoyerLightsToggle",
     "text": "Main Foyer Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "toggle": 1000,
     "plc": {
@@ -162,7 +162,7 @@
   {
     "name": "mainFoyerLightsStatus",
     "text": "Main Foyer Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "plc": {
       "type": "bool",
@@ -174,7 +174,7 @@
   {
     "name": "southFoyerLightsToggle",
     "text": "South Foyer Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "toggle": 1000,
     "plc": {
@@ -187,7 +187,7 @@
   {
     "name": "southFoyerLightsStatus",
     "text": "South Foyer Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "plc": {
       "type": "bool",
@@ -199,7 +199,7 @@
   {
     "name": "northFoyerLightsToggle",
     "text": "North Foyer Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "toggle": 1000,
     "plc": {
@@ -212,7 +212,7 @@
   {
     "name": "northFoyerLightsStatus",
     "text": "North Foyer Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "plc": {
       "type": "bool",
@@ -224,7 +224,7 @@
   {
     "name": "toiletLightsToggle",
     "text": "Toilet Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "toggle": 1000,
     "plc": {
@@ -237,7 +237,7 @@
   {
     "name": "toiletLightsStatus",
     "text": "Toilet Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "plc": {
       "type": "bool",
@@ -249,7 +249,7 @@
   {
     "name": "rearCorridorLightsToggle",
     "text": "Rear Corridor Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "toggle": 1000,
     "plc": {
@@ -262,7 +262,7 @@
   {
     "name": "rearCorridorLightsStatus",
     "text": "Rear Corridor Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "plc": {
       "type": "bool",
@@ -274,7 +274,7 @@
   {
     "name": "plantRoomLightsToggle",
     "text": "Plant Room Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "toggle": 1000,
     "plc": {
@@ -287,7 +287,7 @@
   {
     "name": "plantRoomLightsStatus",
     "text": "Plant Room Lights",
-    "group": "Lights",
+    "group": "lights",
     "value": false,
     "plc": {
       "type": "bool",

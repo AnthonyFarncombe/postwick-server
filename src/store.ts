@@ -14,36 +14,46 @@ interface PlcDataType {
 
 export interface VariableJson {
   name: string;
+  text?: string;
   value: VariableValueType;
   toggle?: number;
+  group?: string;
   plc?: PlcDataType;
 }
 
 export const storeEvents = new EventEmitter();
 
-class Variable {
+export class Variable {
   public readonly name: string;
+  public readonly text?: string;
   private _value: VariableValueType;
   private _defaultValue: VariableValueType;
   private _toggle?: number;
   private _toggleTimeout?: NodeJS.Timeout;
+  public readonly group?: string;
   public plc?: PlcDataType;
 
   constructor({
     name,
+    text,
     value,
     toggle,
+    group,
     plc,
   }: {
     name: string;
+    text?: string;
     value: VariableValueType;
     toggle?: number;
+    group?: string;
     plc?: PlcDataType;
   }) {
     this.name = name;
+    this.text = text;
     this._value = value;
     this._defaultValue = value;
     this._toggle = toggle;
+    this.group = group;
     this.plc = plc;
   }
 
@@ -90,8 +100,10 @@ export function load(): Promise<void> {
             variables.push(
               new Variable({
                 name: v.name,
+                text: v.text,
                 value: v.value,
                 toggle: v.toggle,
+                group: v.group,
                 plc: v.plc,
               }),
             );
@@ -106,18 +118,6 @@ export function load(): Promise<void> {
   });
 }
 
-// export function updateFromPlc(variablesFromPlc: VariableJson[]): void {
-//   const updatedVars = variablesFromPlc
-//     .map(newVar => ({ oldVar: variables.find(v => v.name === newVar.name), newVar }))
-//     .filter(v => v.oldVar && v.oldVar.value !== v.newVar.value);
-
-//   updatedVars.forEach(v => {
-//     if (!v.oldVar) return;
-//     v.newVar.value = v.oldVar.value;
-//   });
-// }
-
 export default {
   variables,
-  // updateFromPlc,
 };

@@ -1,7 +1,18 @@
-import { IResolvers } from "apollo-server-express";
+import { IResolvers, ApolloError } from "apollo-server-express";
 import { ApolloContext } from "../server";
-import store, { VariableValueType } from "../store";
+import store, { VariableValueType, Variable } from "../store";
 import { GraphQLScalarType } from "graphql";
+
+interface GqlVariableType {
+  name: string;
+  text?: string;
+  value: VariableValueType;
+  group?: string;
+}
+
+function mapVariablesToGql(variables: Variable[]): GqlVariableType[] {
+  return variables.map(v => ({ name: v.name, text: v.text, value: v.value, group: v.group }));
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const variablesResolvers: IResolvers<any, ApolloContext> = {
@@ -17,16 +28,16 @@ const variablesResolvers: IResolvers<any, ApolloContext> = {
   }),
   Query: {
     variables(): { name: string; value: VariableValueType }[] {
-      return store.variables;
+      return mapVariablesToGql(store.variables);
     },
   },
   Mutation: {
-    setVariableValue(_parent, { name, value }: { name: string; value: VariableValueType }): boolean {
+    setVariableValue(_parent, { name, value }: { name: string; value: VariableValueType }): GqlVariableType {
       const variable = store.variables.find(v => v.name === name);
-      if (!variable) return false;
+      if (!variable) throw new ApolloError("Variable not found!");
 
       variable.value = value;
-      return true;
+      return mapVariablesToGql([variable])[0];
     },
   },
 };

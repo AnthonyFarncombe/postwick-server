@@ -5,7 +5,9 @@ export const variableType = gql`
 
   type Variable {
     name: String!
+    text: String
     value: BoolOrInt!
+    group: String
   }
 
   input SetVariableValueInput {
