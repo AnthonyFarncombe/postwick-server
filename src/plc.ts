@@ -1,9 +1,9 @@
 import net from "net";
 import chalk from "chalk";
-import store, { Variable, storeEvents } from "./store";
+import store, { VariableJson, storeEvents } from "./store";
 
-let readVariables: Variable[] = [];
-let writeVariables: Variable[] = [];
+let readVariables: VariableJson[] = [];
+let writeVariables: VariableJson[] = [];
 
 function loadVariables(): void {
   readVariables = store.variables.filter(v => v.plc && v.plc.action === "read");
@@ -61,7 +61,7 @@ client.on("connect", () => {
   writePending = true;
   writeToPlc();
 
-  storeEvents.on("valueChanged", (variable: Variable) => {
+  storeEvents.on("valueChanged", (variable: VariableJson) => {
     if (variable.plc && variable.plc.action === "write") {
       writePending = true;
       writeToPlc();
@@ -86,9 +86,9 @@ client.on("close", hadError => {
 function processReceiveBuffer(chunk: Buffer): void {
   readVariables.forEach(v => {
     if (v.plc?.type === "bool" && typeof v.plc.bit === "number") {
-      v.setValue((chunk[v.plc.byte] & (0x1 << v.plc.bit)) > 0x0);
+      v.value = (chunk[v.plc.byte] & (0x1 << v.plc.bit)) > 0x0;
     } else if (v.plc?.type === "int16") {
-      v.setValue((chunk[v.plc.byte] << 0x8) + chunk[v.plc.byte + 0x1]);
+      v.value = (chunk[v.plc.byte] << 0x8) + chunk[v.plc.byte + 0x1];
     }
   });
 }

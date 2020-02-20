@@ -5,20 +5,73 @@ import chalk from "chalk";
 
 export type VariableValueType = boolean | number;
 
-export interface Variable {
+interface PlcDataType {
+  type: "bool" | "int16";
+  action: "read" | "write";
+  byte: number;
+  bit?: number;
+}
+
+export interface VariableJson {
   name: string;
   value: VariableValueType;
-  setValue: (value: VariableValueType) => void;
   toggle?: number;
-  plc?: {
-    type: "bool" | "int16";
-    action: "read" | "write";
-    byte: number;
-    bit?: number;
-  };
+  plc?: PlcDataType;
 }
 
 export const storeEvents = new EventEmitter();
+
+class Variable {
+  public readonly name: string;
+  private _value: VariableValueType;
+  private _defaultValue: VariableValueType;
+  private _toggle?: number;
+  private _toggleTimeout?: NodeJS.Timeout;
+  public plc?: PlcDataType;
+
+  constructor({
+    name,
+    value,
+    toggle,
+    plc,
+  }: {
+    name: string;
+    value: VariableValueType;
+    toggle?: number;
+    plc?: PlcDataType;
+  }) {
+    this.name = name;
+    this._value = value;
+    this._defaultValue = value;
+    this._toggle = toggle;
+    this.plc = plc;
+  }
+
+  get value(): VariableValueType {
+    return this._value;
+  }
+  set value(value: VariableValueType) {
+    let newValue: VariableValueType;
+
+    if (typeof this._value === "boolean") {
+      newValue = !!value;
+    } else if (typeof this._value === "number" && typeof value === "number") {
+      newValue = value;
+    } else {
+      return;
+    }
+
+    if (newValue === this._value) return;
+    this._value = newValue;
+
+    storeEvents.emit("valueChanged", this);
+
+    if (this._toggle) {
+      this._toggleTimeout && clearTimeout(this._toggleTimeout);
+      this._toggleTimeout = setTimeout(() => (this.value = this._defaultValue), this._toggle);
+    }
+  }
+}
 
 export const variables: Variable[] = [];
 
@@ -31,25 +84,17 @@ export function load(): Promise<void> {
         console.log(chalk.red(err.message));
       } else {
         try {
-          const jsonData: Variable[] = JSON.parse(data);
+          const jsonData: VariableJson[] = JSON.parse(data);
 
           jsonData.forEach(v => {
-            v.setValue = function(value: VariableValueType): void {
-              if (typeof v.value === "boolean") {
-                this.value = !!value;
-              } else if (typeof v.value === "number" && typeof value === "number") {
-                this.value = value;
-              }
-
-              storeEvents.emit("valueChanged", v);
-
-              // Check if toggle variable
-              if (this.toggle) {
-                //
-              }
-            };
-
-            variables.push(v);
+            variables.push(
+              new Variable({
+                name: v.name,
+                value: v.value,
+                toggle: v.toggle,
+                plc: v.plc,
+              }),
+            );
           });
         } catch (err2) {
           if (err2) console.log(chalk.red(err2.message));
@@ -61,18 +106,18 @@ export function load(): Promise<void> {
   });
 }
 
-export function updateFromPlc(variablesFromPlc: Variable[]): void {
-  const updatedVars = variablesFromPlc
-    .map(newVar => ({ oldVar: variables.find(v => v.name === newVar.name), newVar }))
-    .filter(v => v.oldVar && v.oldVar.value !== v.newVar.value);
+// export function updateFromPlc(variablesFromPlc: VariableJson[]): void {
+//   const updatedVars = variablesFromPlc
+//     .map(newVar => ({ oldVar: variables.find(v => v.name === newVar.name), newVar }))
+//     .filter(v => v.oldVar && v.oldVar.value !== v.newVar.value);
 
-  updatedVars.forEach(v => {
-    if (!v.oldVar) return;
-    v.newVar.value = v.oldVar.value;
-  });
-}
+//   updatedVars.forEach(v => {
+//     if (!v.oldVar) return;
+//     v.newVar.value = v.oldVar.value;
+//   });
+// }
 
 export default {
   variables,
-  updateFromPlc,
+  // updateFromPlc,
 };

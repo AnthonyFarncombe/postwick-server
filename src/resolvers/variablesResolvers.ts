@@ -25,7 +25,7 @@ const variablesResolvers: IResolvers<any, ApolloContext> = {
       const variable = store.variables.find(v => v.name === name);
       if (!variable) return false;
 
-      variable.setValue(value);
+      variable.value = value;
       return true;
     },
   },

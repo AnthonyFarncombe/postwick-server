@@ -1,7 +1,7 @@
 import socket from "socket.io";
 import { Server } from "http";
 import chalk from "chalk";
-import store, { Variable } from "./store";
+import store, { VariableJson } from "./store";
 import Event from "./models/event";
 
 interface Session {
@@ -46,7 +46,7 @@ export default (http: Server): void => {
   });
 };
 
-export function sendUpdateToClient(variables: Variable[]): void {
+export function sendUpdateToClient(variables: VariableJson[]): void {
   console.log(variables);
   sessions.forEach(s => {
     s.socket.emit("variablesUpdated", variables);
