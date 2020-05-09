@@ -28,13 +28,23 @@ let connected = false;
 let writePending = false;
 let writeTimeout: NodeJS.Timeout | undefined;
 
-function writeToPlc(): void {
+async function writeToPlc(): Promise<void> {
   writeTimeout && clearTimeout(writeTimeout);
   writePending = false;
 
   if (connected) {
     const buffer: Buffer = Buffer.alloc(100);
 
+    // Write header
+    buffer[0] = 0xfe;
+
+    // Comms version
+    buffer[1] = 1;
+
+    // Message length
+    buffer.writeUInt16BE(100, 4);
+
+    // Write variable values to buffer
     writeVariables.forEach(v => {
       if (v.plc?.type === "bool" && typeof v.plc.bit === "number" && v.value) {
         buffer[v.plc.byte] |= 0x1 << v.plc.bit;
@@ -43,7 +53,19 @@ function writeToPlc(): void {
       }
     });
 
-    client.write(buffer);
+    // Calculate checksum
+    for (let i = 4; i <= 97; i++) buffer[98] += buffer[i];
+
+    // Write footer
+    buffer[99] = 0xfb;
+
+    // Dispatch buffer
+    await new Promise(resolve =>
+      client.write(buffer, err => {
+        err && console.error(err);
+        resolve();
+      }),
+    );
   }
 
   if (writePending) {

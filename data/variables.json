@@ -7,7 +7,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 2
+      "byte": 4
     }
   },
   {
@@ -18,7 +18,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 4
+      "byte": 6
     }
   },
   {
@@ -29,7 +29,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 6
+      "byte": 8
     }
   },
   {
@@ -40,7 +40,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 8
+      "byte": 10
     }
   },
   {
@@ -51,7 +51,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 10
+      "byte": 12
     }
   },
   {
@@ -62,7 +62,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 12
+      "byte": 14
     }
   },
   {
@@ -73,7 +73,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 14
+      "byte": 16
     }
   },
   {
@@ -84,7 +84,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 16
+      "byte": 18
     }
   },
   {
@@ -95,7 +95,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 18
+      "byte": 20
     }
   },
   {
@@ -106,7 +106,7 @@
     "plc": {
       "type": "int16",
       "action": "read",
-      "byte": 20
+      "byte": 22
     }
   },
   {
@@ -118,7 +118,7 @@
     "plc": {
       "type": "bool",
       "action": "write",
-      "byte": 2,
+      "byte": 4,
       "bit": 0
     }
   },
@@ -130,7 +130,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 22,
+      "byte": 24,
       "bit": 0
     }
   },
@@ -142,7 +142,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 22,
+      "byte": 24,
       "bit": 1
     }
   },
@@ -155,7 +155,7 @@
     "plc": {
       "type": "bool",
       "action": "write",
-      "byte": 2,
+      "byte": 4,
       "bit": 1
     }
   },
@@ -167,7 +167,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 22,
+      "byte": 24,
       "bit": 2
     }
   },
@@ -180,7 +180,7 @@
     "plc": {
       "type": "bool",
       "action": "write",
-      "byte": 2,
+      "byte": 4,
       "bit": 2
     }
   },
@@ -192,7 +192,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 22,
+      "byte": 24,
       "bit": 3
     }
   },
@@ -205,7 +205,7 @@
     "plc": {
       "type": "bool",
       "action": "write",
-      "byte": 2,
+      "byte": 4,
       "bit": 3
     }
   },
@@ -217,7 +217,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 22,
+      "byte": 24,
       "bit": 4
     }
   },
@@ -230,7 +230,7 @@
     "plc": {
       "type": "bool",
       "action": "write",
-      "byte": 2,
+      "byte": 4,
       "bit": 4
     }
   },
@@ -242,7 +242,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 22,
+      "byte": 24,
       "bit": 5
     }
   },
@@ -255,7 +255,7 @@
     "plc": {
       "type": "bool",
       "action": "write",
-      "byte": 2,
+      "byte": 4,
       "bit": 5
     }
   },
@@ -267,7 +267,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 22,
+      "byte": 24,
       "bit": 6
     }
   },
@@ -280,7 +280,7 @@
     "plc": {
       "type": "bool",
       "action": "write",
-      "byte": 2,
+      "byte": 4,
       "bit": 6
     }
   },
@@ -292,7 +292,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 22,
+      "byte": 24,
       "bit": 7
     }
   }
