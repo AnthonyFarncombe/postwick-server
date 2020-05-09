@@ -34,7 +34,8 @@ export function getUserFromRequest(req: Request): Promise<UserContext> {
         if (!payload || !payload.exp || Date.now() >= payload.exp * 1000)
           return reject(new Error("JWT token has expired!"));
 
-        if (payload.ip !== req.connection.remoteAddress) return reject("IP address does not match!");
+        if (req.connection.remoteAddress !== "::1" && payload.ip !== req.connection.remoteAddress)
+          return reject("IP address does not match!");
 
         const userContext: UserContext = {
           userId: payload.userId,

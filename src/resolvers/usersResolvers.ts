@@ -27,9 +27,11 @@ const usersResolvers: IResolvers<any, ApolloContext> = {
         .toString(30)
         .slice(-10);
 
+      console.log(password);
+
       const passwordHash = await bcrypt.hash(password, 10);
 
-      const user = new User({ ...args.user, password: passwordHash });
+      const user = new User({ ...args.user, passwordHash });
       await user.save();
 
       return user;

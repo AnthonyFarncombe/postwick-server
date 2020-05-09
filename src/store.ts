@@ -87,7 +87,8 @@ export const variables: Variable[] = [];
 
 export function load(): Promise<void> {
   return new Promise((resolve): void => {
-    const variablesFileName = path.resolve(__dirname, "../", "data", "variables.json");
+    let variablesFileName = path.resolve(__dirname, "variables.json");
+    if (!fs.existsSync(variablesFileName)) variablesFileName = path.resolve(__dirname, "../data", "variables.json");
 
     fs.readFile(variablesFileName, "utf8", (err, data) => {
       if (err) {
