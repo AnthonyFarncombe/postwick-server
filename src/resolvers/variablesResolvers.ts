@@ -27,8 +27,11 @@ const variablesResolvers: IResolvers<any, ApolloContext> = {
     },
   }),
   Query: {
-    variables(): { name: string; value: VariableValueType }[] {
-      return mapVariablesToGql(store.variables);
+    variables(_parent, { name }: { name: string }): { name: string; value: VariableValueType }[] {
+      let variables: Variable[];
+      if (name) variables = store.variables.filter(v => v.name === name);
+      else variables = store.variables;
+      return mapVariablesToGql(variables);
     },
   },
   Mutation: {

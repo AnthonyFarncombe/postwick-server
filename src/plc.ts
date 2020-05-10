@@ -42,7 +42,7 @@ async function writeToPlc(): Promise<void> {
     buffer[1] = 1;
 
     // Message length
-    buffer.writeUInt16BE(100, 4);
+    buffer.writeUInt16BE(100, 2);
 
     // Write variable values to buffer
     writeVariables.forEach(v => {
