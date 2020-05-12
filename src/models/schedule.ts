@@ -1,17 +1,18 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface EventType extends Document {
+export interface ScheduleType extends Document {
   name: string;
   dayOfWeek: string;
   frequency: number;
   date?: Date;
 }
 
-const eventSchema: Schema = new Schema({
+const scheduleSchema: Schema = new Schema({
   name: { type: String, required: true },
   dayOfWeek: { type: String, required: true },
-  frequency: { type: Number, required: true },
+  frequency: { type: Number },
   date: { type: Date },
+  overrideDay: { type: Boolean },
 });
 
-export default mongoose.model<EventType>("Event", eventSchema);
+export default mongoose.model<ScheduleType>("Schedule", scheduleSchema);

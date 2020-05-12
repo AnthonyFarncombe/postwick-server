@@ -8,6 +8,7 @@ const usersResolvers: IResolvers<any, ApolloContext> = {
   Query: {
     async users(_parent, _args, context): Promise<UserType[]> {
       if (!context.user || !context.user.roles.includes("users")) throw new AuthenticationError("Access denied!");
+
       const users = await User.find();
       return users;
     },

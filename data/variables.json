@@ -295,5 +295,65 @@
       "byte": 24,
       "bit": 7
     }
+  },
+  {
+    "name": "anprTrigger",
+    "text": "ANPR Trigger",
+    "group": "anpr",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 25,
+      "bit": 0
+    }
+  },
+  {
+    "name": "anprApprove",
+    "text": "ANPR Approve",
+    "group": "anpr",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 25,
+      "bit": 1
+    }
+  },
+  {
+    "name": "securityAlarmEnabled",
+    "text": "Security Alarm Enabled",
+    "group": "alarm",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 25,
+      "bit": 2
+    }
+  },
+  {
+    "name": "securityAlarmTriggered",
+    "text": "Security Alarm Triggered",
+    "group": "alarm",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 25,
+      "bit": 3
+    }
+  },
+  {
+    "name": "fireAlarmTriggered",
+    "text": "Fire Alarm Triggered",
+    "group": "alarm",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 25,
+      "bit": 4
+    }
   }
 ]

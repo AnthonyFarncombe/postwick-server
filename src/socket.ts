@@ -2,7 +2,7 @@ import socket from "socket.io";
 import { Server } from "http";
 import chalk from "chalk";
 import store, { storeEvents, Variable } from "./store";
-import Event from "./models/event";
+import Schedule from "./models/schedule";
 
 interface Session {
   socket: socket.Socket;
@@ -36,10 +36,10 @@ export default (http: Server): void => {
       fn && fn(store.variables.map(v => ({ name: v.name, text: v.text, value: v.value, group: v.group })));
     });
 
-    socket.on("getEvents", (_data: object, fn: Function) => {
-      Event.find((err, res) => {
+    socket.on("getSchedules", (_data: object, fn: Function) => {
+      Schedule.find((err, res) => {
         if (err) {
-          console.log(chalk.red("Error loading events"));
+          console.log(chalk.red("Error loading schedules"));
           fn && fn([]);
         } else {
           fn && fn(res);
