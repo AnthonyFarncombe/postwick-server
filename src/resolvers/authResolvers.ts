@@ -103,7 +103,7 @@ const authResolvers: IResolvers = {
 
         const passwordHash = await bcrypt.hash(password, 10);
         await User.findByIdAndUpdate(user._id, {
-          $set: { passwordHash, resetToken: null, resetExpires: null },
+          $set: { passwordHash, resetToken: undefined, resetExpires: undefined },
         });
 
         return true;
