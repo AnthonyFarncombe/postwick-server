@@ -3,6 +3,7 @@ dotenv.config();
 
 import "./server";
 import "./mongoose";
+import "./alerts";
 import { load as loadStore } from "./store";
 import { connect as connectPlc } from "./plc";
 

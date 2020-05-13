@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import handlebars from "handlebars";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import SendmailTransport from "nodemailer/lib/sendmail-transport";
+import Mail from "nodemailer/lib/mailer";
 
 const smtpTransport: SMTPTransport.Options = {
   host: process.env.EMAIL_HOST,
@@ -23,7 +24,7 @@ export async function sendMail({
   subject,
   context,
 }: {
-  to: string;
+  to: string | Mail.Address | (string | Mail.Address)[];
   template: string;
   subject: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
