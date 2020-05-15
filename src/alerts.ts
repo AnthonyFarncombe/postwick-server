@@ -2,6 +2,8 @@ import { storeEvents, Variable } from "./store";
 import { sendMail } from "./email";
 
 storeEvents.on("valueChanged", (variable: Variable) => {
+  if (!variable.value) return;
+
   const match = /^([a-z]+)AlarmTriggered$/.exec(variable.name);
   if (!match) return;
 
