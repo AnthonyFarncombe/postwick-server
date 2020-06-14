@@ -2,11 +2,29 @@ import socket from "socket.io";
 import { Server } from "http";
 import chalk from "chalk";
 import store, { storeEvents, Variable } from "./store";
-import Schedule from "./models/schedule";
+import Schedule, { ScheduleType } from "./models/schedule";
 
 interface Session {
   socket: socket.Socket;
 }
+
+interface ScheduleSocketType {
+  id: string;
+  dayOfWeek: string;
+  timeOfMeeting: string;
+  frequency: string;
+  startDate?: Date;
+  overrideDay: boolean;
+}
+
+const mapSchedule = (schedule: ScheduleType): ScheduleSocketType => ({
+  id: schedule.id,
+  dayOfWeek: schedule.dayOfWeek,
+  timeOfMeeting: schedule.timeOfMeeting,
+  frequency: schedule.frequency,
+  startDate: schedule.startDate,
+  overrideDay: schedule.overrideDay,
+});
 
 const sessions: Session[] = [];
 
@@ -42,12 +60,72 @@ export default (http: Server): void => {
           console.log(chalk.red("Error loading schedules"));
           fn && fn([]);
         } else {
-          fn && fn(res);
+          fn && fn(res.map(s => mapSchedule(s)));
         }
       });
     });
 
+    socket.on("saveSchedule", async (data: ScheduleType, fn: Function) => {
+      // Check a schedule has been passed
+      if (!data) return fn && fn();
+
+      try {
+        if (data.id) {
+          // Update existing schedule
+          const schedule = await Schedule.findById(data.id);
+          if (schedule) {
+            Object.assign(schedule, data);
+            await schedule.save();
+            fn && fn(schedule);
+          } else {
+            fn && fn({ error: "Schedule not found!" });
+          }
+        } else {
+          // Create new schedule
+          const schedule = new Schedule(data);
+          await schedule.save();
+          fn && fn(schedule);
+        }
+
+        Schedule.find((err, res) => {
+          if (err) console.log(chalk.red("Error loading schedules"));
+          else
+            socket.emit(
+              "schedulesUpdated",
+              res.map(s => mapSchedule(s)),
+            );
+        });
+      } catch (err) {
+        console.error(err);
+        fn && fn(err);
+      }
+    });
+
+    socket.on("deleteSchedule", async (id: string, fn: Function) => {
+      if (!id) {
+        fn && fn();
+        return;
+      }
+
+      try {
+        await Schedule.findByIdAndDelete(id);
+        fn && fn();
+      } catch (err) {
+        fn && fn(err);
+      }
+
+      Schedule.find((err, res) => {
+        if (err) console.log(chalk.red("Error loading schedules"));
+        else
+          socket.emit(
+            "schedulesUpdated",
+            res.map(s => mapSchedule(s)),
+          );
+      });
+    });
+
     socket.on("disconnect", () => {
+      console.log(chalk.yellow(`User '${socket.id} has disconnected`));
       const index = sessions.indexOf(session);
       if (index > -1) sessions.splice(index, 1);
     });

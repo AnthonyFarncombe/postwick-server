@@ -4,6 +4,8 @@ import { ApolloServer } from "apollo-server-express";
 import chalk from "chalk";
 
 import socketModule from "./socket";
+import { getCCTVImage } from "./cctv";
+import { getNumberPlate } from "./anpr";
 
 import { getUserFromRequest, UserContext } from "./auth";
 
@@ -32,6 +34,25 @@ server.applyMiddleware({ app });
 
 app.get("/", (_req, res) => {
   res.json({ hello: "world" });
+});
+
+app.get("/cctv", async (_req, res) => {
+  try {
+    const image = await getCCTVImage();
+    res.contentType("image/jpeg");
+    res.send(image);
+  } catch (err) {
+    res.json(err);
+  }
+});
+
+app.get("/anpr", async (_req, res) => {
+  try {
+    const plate = await getNumberPlate();
+    res.json({ plate });
+  } catch (err) {
+    res.json(err);
+  }
 });
 
 socketModule(httpServer);

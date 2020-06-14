@@ -11,6 +11,7 @@ const schedulesResolvers: IResolvers<any, ApolloContext> = {
       return schedules;
     },
   },
+  Mutation: {},
 };
 
 export default schedulesResolvers;

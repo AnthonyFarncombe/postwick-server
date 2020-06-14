@@ -1,0 +1,41 @@
+import urllib from "urllib";
+import Jimp from "jimp";
+import path from "path";
+import fs from "fs";
+import moment from "moment";
+
+export async function getCCTVImage(): Promise<Buffer> {
+  const url: string = process.env.CCTV_URL || "";
+  const username = process.env.CCTV_USERNAME;
+  const password = process.env.CCTV_PASSWORD;
+
+  const { res, data } = await urllib.request(url, { digestAuth: `${username}:${password}`, timeout: [15000, 15000] });
+  if (res.statusCode !== 200) throw new Error("Unable to download image!");
+
+  const jimpImage = await Jimp.read(data);
+
+  jimpImage.crop(
+    jimpImage.getWidth() * 0.25,
+    jimpImage.getHeight() * 0.25,
+    jimpImage.getWidth() * 0.5,
+    jimpImage.getHeight() * 0.5,
+  );
+
+  // Save images to archive
+  try {
+    if (process.env.CCTV_ARCHIVE) {
+      const imagePathOrig = path.resolve(process.env.CCTV_ARCHIVE, `gate_${moment().format("YYYYMMDD_HHmmss")}.jpg`);
+      fs.writeFile(imagePathOrig, data, err => err && console.error(err));
+
+      const imagePathCropped = path.resolve(
+        process.env.CCTV_ARCHIVE,
+        `gate_cropped_${moment().format("YYYYMMDD_HHmmss")}.jpg`,
+      );
+      jimpImage.writeAsync(imagePathCropped).catch(err => console.error(err));
+    }
+  } catch (err) {
+    //
+  }
+
+  return await jimpImage.getBufferAsync("image/jpeg");
+}

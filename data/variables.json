@@ -355,5 +355,15 @@
       "byte": 25,
       "bit": 4
     }
+  },
+  {
+    "name": "meetingScheduled",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 4,
+      "bit": 7
+    }
   }
 ]

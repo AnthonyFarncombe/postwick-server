@@ -10,6 +10,7 @@
         "exceptionserver",
         "farncombe",
         "heathwood",
+        "hmmss",
         "interop",
         "keepalive",
         "modbus",
@@ -22,6 +23,9 @@
         "sourcemap",
         "tslib",
         "typechecking",
+        "urllib",
+        "vancebuild",
+        "yyyymmdd",
         "zjov"
     ],
     "editor.tabSize": 2,
