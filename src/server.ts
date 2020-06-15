@@ -1,6 +1,7 @@
 import http from "http";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
+import cors from "cors";
 import chalk from "chalk";
 
 import socketModule from "./socket";
@@ -29,6 +30,8 @@ const server = new ApolloServer({
 const app = express();
 
 const httpServer = http.createServer(app);
+
+app.use(cors());
 
 server.applyMiddleware({ app });
 
