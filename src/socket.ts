@@ -29,7 +29,7 @@ const mapSchedule = (schedule: ScheduleType): ScheduleSocketType => ({
 const sessions: Session[] = [];
 
 export default (http: Server): void => {
-  const io = socket(http);
+  const io = socket(http, { origins: "*:*" });
 
   io.on("connection", socket => {
     const session: Session = { socket };
