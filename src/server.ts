@@ -35,11 +35,11 @@ app.use(cors());
 
 server.applyMiddleware({ app });
 
-app.get("/", (_req, res) => {
+app.get("/api", (_req, res) => {
   res.json({ hello: "world" });
 });
 
-app.get("/cctv", async (_req, res) => {
+app.get("/api/cctv", async (_req, res) => {
   try {
     const image = await getCCTVImage();
     res.contentType("image/jpeg");
@@ -49,7 +49,7 @@ app.get("/cctv", async (_req, res) => {
   }
 });
 
-app.get("/anpr", async (_req, res) => {
+app.get("/api/anpr", async (_req, res) => {
   try {
     const plate = await getNumberPlate();
     res.json({ plate });
