@@ -1,5 +1,5 @@
 import { storeEvents, Variable, variables } from "./store";
-import { getCCTVImage } from "./cctv";
+import { getCCTVImage, ImageWithNames } from "./cctv";
 import { textFromImage } from "./aws";
 import Car, { CarType } from "./models/car";
 
@@ -7,8 +7,8 @@ let carPresent: CarType | null = null;
 
 // Requests an image from the camera
 // The camera often fails to return an image on the first request so up to three requests are made
-async function getImage(carId: string, attempts = 3): Promise<Buffer> {
-  let image: Buffer | null = null;
+async function getImage(carId: string, attempts = 3): Promise<ImageWithNames> {
+  let image: ImageWithNames | undefined;
 
   while (!image && attempts > 0 && carPresent && carPresent.id === carId) {
     try {
@@ -62,8 +62,13 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
         // Get an image of the car
         const carImage = await getImage(car.id);
 
+        // Save the file names of the images to the database
+        car.imagePathOrig = carImage.imagePathOrig;
+        car.imagePathCropped = carImage.imagePathCropped;
+        await car.save();
+
         // Get the plate from the image and save it to the database
-        car.plateText = await getPlateFromImage(carImage);
+        car.plateText = await getPlateFromImage(carImage.image);
         await car.save();
 
         // Check if this car has been previously approved
