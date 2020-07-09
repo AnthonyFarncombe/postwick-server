@@ -1,7 +1,17 @@
 import { storeEvents, Variable } from "./store";
 import { sendMail } from "./email";
+import { logToDb } from "./logger";
 
-storeEvents.on("valueChanged", (variable: Variable) => {
+async function logEventsToDb(variable: Variable): Promise<void> {
+  try {
+    if (variable.name === "securityAlarmEnabled" && variable.value) await logToDb("SecurityAlarmEnabled");
+    else if (variable.name === "securityAlarmEnabled" && !variable.value) await logToDb("SecurityAlarmDisabled");
+  } catch (err) {}
+}
+
+storeEvents.on("valueChanged", async (variable: Variable) => {
+  await logEventsToDb(variable);
+
   if (!variable.value) return;
 
   const match = /^([a-z]+)AlarmTriggered$/.exec(variable.name);

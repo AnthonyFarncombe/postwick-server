@@ -6,14 +6,18 @@ export const userType = gql`
     firstName: String!
     lastName: String!
     email: String!
+    mobile: String
     roles: [String!]
+    notifications: [String!]
   }
 
   input CreateUserInput {
     firstName: String!
     lastName: String!
     email: String!
+    mobile: String
     roles: [String!]
+    notifications: [String!]
   }
 
   input UpdateUserInput {
@@ -21,6 +25,8 @@ export const userType = gql`
     firstName: String!
     lastName: String!
     email: String!
+    mobile: String
     roles: [String!]
+    notifications: [String!]
   }
 `;

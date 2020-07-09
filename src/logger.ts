@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import moment from "moment";
+import Log from "./models/log";
 
 export default (
   moduleName: string,
@@ -40,3 +41,10 @@ export default (
     },
   };
 };
+
+export async function logToDb(type: string, description?: string): Promise<void> {
+  try {
+    const log = new Log({ timestamp: new Date(), type, description });
+    await log.save();
+  } catch (err) {}
+}

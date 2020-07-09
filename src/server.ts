@@ -6,7 +6,7 @@ import chalk from "chalk";
 
 import socketModule from "./socket";
 import { getCCTVImage } from "./cctv";
-import { getNumberPlate } from "./anpr";
+import { getPlateFromImage } from "./anpr";
 
 import { getUserFromRequest, UserContext } from "./auth";
 
@@ -51,7 +51,7 @@ app.get("/api/cctv", async (_req, res) => {
 
 app.get("/api/anpr", async (_req, res) => {
   try {
-    const plate = await getNumberPlate();
+    const plate = await getPlateFromImage();
     res.json({ plate });
   } catch (err) {
     res.json(err);
