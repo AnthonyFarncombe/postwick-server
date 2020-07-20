@@ -126,24 +126,11 @@
     "name": "mainHallLightsStatus",
     "text": "Main Hall Lights",
     "group": "lights",
-    "value": false,
+    "value": 0,
     "plc": {
-      "type": "bool",
+      "type": "int8",
       "action": "read",
-      "byte": 24,
-      "bit": 0
-    }
-  },
-  {
-    "name": "mainHallLightsPhasing",
-    "text": "Main Hall Lights",
-    "group": "lights",
-    "value": false,
-    "plc": {
-      "type": "bool",
-      "action": "read",
-      "byte": 24,
-      "bit": 1
+      "byte": 24
     }
   },
   {
@@ -163,12 +150,11 @@
     "name": "mainFoyerLightsStatus",
     "text": "Main Foyer Lights",
     "group": "lights",
-    "value": false,
+    "value": 0,
     "plc": {
-      "type": "bool",
+      "type": "int8",
       "action": "read",
-      "byte": 24,
-      "bit": 2
+      "byte": 25
     }
   },
   {
@@ -188,12 +174,11 @@
     "name": "southFoyerLightsStatus",
     "text": "South Foyer Lights",
     "group": "lights",
-    "value": false,
+    "value": 0,
     "plc": {
-      "type": "bool",
+      "type": "int8",
       "action": "read",
-      "byte": 24,
-      "bit": 3
+      "byte": 26
     }
   },
   {
@@ -213,12 +198,11 @@
     "name": "northFoyerLightsStatus",
     "text": "North Foyer Lights",
     "group": "lights",
-    "value": false,
+    "value": 0,
     "plc": {
-      "type": "bool",
+      "type": "int8",
       "action": "read",
-      "byte": 24,
-      "bit": 4
+      "byte": 27
     }
   },
   {
@@ -238,12 +222,11 @@
     "name": "toiletLightsStatus",
     "text": "Toilet Lights",
     "group": "lights",
-    "value": false,
+    "value": 0,
     "plc": {
-      "type": "bool",
+      "type": "int8",
       "action": "read",
-      "byte": 24,
-      "bit": 5
+      "byte": 28
     }
   },
   {
@@ -263,12 +246,11 @@
     "name": "rearCorridorLightsStatus",
     "text": "Rear Corridor Lights",
     "group": "lights",
-    "value": false,
+    "value": 0,
     "plc": {
-      "type": "bool",
+      "type": "int8",
       "action": "read",
-      "byte": 24,
-      "bit": 6
+      "byte": 29
     }
   },
   {
@@ -288,12 +270,11 @@
     "name": "plantRoomLightsStatus",
     "text": "Plant Room Lights",
     "group": "lights",
-    "value": false,
+    "value": 0,
     "plc": {
-      "type": "bool",
+      "type": "int8",
       "action": "read",
-      "byte": 24,
-      "bit": 7
+      "byte": 30
     }
   },
   {
@@ -305,7 +286,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 25,
+      "byte": 35,
       "bit": 0
     }
   },
@@ -318,7 +299,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 25,
+      "byte": 35,
       "bit": 1
     }
   },
@@ -331,7 +312,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 25,
+      "byte": 35,
       "bit": 2
     }
   },
@@ -344,7 +325,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 25,
+      "byte": 35,
       "bit": 3
     }
   },
@@ -357,7 +338,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 25,
+      "byte": 35,
       "bit": 4
     }
   },
@@ -370,7 +351,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 25,
+      "byte": 35,
       "bit": 5
     }
   },
@@ -383,7 +364,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 25,
+      "byte": 35,
       "bit": 6
     }
   },
@@ -396,7 +377,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 25,
+      "byte": 35,
       "bit": 7
     }
   },

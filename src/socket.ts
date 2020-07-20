@@ -47,27 +47,29 @@ export default (http: Server): void => {
         }
       }
 
-      fn && fn({ error: "Variable not found!" });
+      fn && typeof fn === "function" && fn({ error: "Variable not found!" });
     });
 
     socket.on("getVariables", (_data: object, fn: Function) => {
-      fn && fn(store.variables.map(v => ({ name: v.name, text: v.text, value: v.value, group: v.group })));
+      fn &&
+        typeof fn === "function" &&
+        fn(store.variables.map(v => ({ name: v.name, text: v.text, value: v.value, group: v.group })));
     });
 
     socket.on("getSchedules", (_data: object, fn: Function) => {
       Schedule.find((err, res) => {
         if (err) {
           console.log(chalk.red("Error loading schedules"));
-          fn && fn([]);
+          fn && typeof fn === "function" && fn([]);
         } else {
-          fn && fn(res.map(s => mapSchedule(s)));
+          fn && typeof fn === "function" && fn(res.map(s => mapSchedule(s)));
         }
       });
     });
 
     socket.on("saveSchedule", async (data: ScheduleType, fn: Function) => {
       // Check a schedule has been passed
-      if (!data) return fn && fn();
+      if (!data) return fn && typeof fn === "function" && fn();
 
       try {
         if (data.id) {
@@ -76,15 +78,15 @@ export default (http: Server): void => {
           if (schedule) {
             Object.assign(schedule, data);
             await schedule.save();
-            fn && fn(schedule);
+            fn && typeof fn === "function" && fn(schedule);
           } else {
-            fn && fn({ error: "Schedule not found!" });
+            fn && typeof fn === "function" && fn({ error: "Schedule not found!" });
           }
         } else {
           // Create new schedule
           const schedule = new Schedule(data);
           await schedule.save();
-          fn && fn(schedule);
+          fn && typeof fn === "function" && fn(schedule);
         }
 
         Schedule.find((err, res) => {
@@ -97,21 +99,21 @@ export default (http: Server): void => {
         });
       } catch (err) {
         console.error(err);
-        fn && fn(err);
+        fn && typeof fn === "function" && fn(err);
       }
     });
 
     socket.on("deleteSchedule", async (id: string, fn: Function) => {
       if (!id) {
-        fn && fn();
+        fn && typeof fn === "function" && fn();
         return;
       }
 
       try {
         await Schedule.findByIdAndDelete(id);
-        fn && fn();
+        fn && typeof fn === "function" && fn();
       } catch (err) {
-        fn && fn(err);
+        fn && typeof fn === "function" && fn(err);
       }
 
       Schedule.find((err, res) => {

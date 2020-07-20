@@ -48,6 +48,8 @@ async function writeToPlc(): Promise<void> {
     writeVariables.forEach(v => {
       if (v.plc?.type === "bool" && typeof v.plc.bit === "number" && v.value) {
         buffer[v.plc.byte] |= 0x1 << v.plc.bit;
+      } else if (v.plc?.type === "int8") {
+        buffer.writeInt8(v.value as number, v.plc.byte);
       } else if (v.plc?.type === "int16") {
         buffer.writeInt16BE(v.value as number, v.plc.byte);
       }
@@ -109,6 +111,8 @@ function processReceiveBuffer(chunk: Buffer): void {
   readVariables.forEach(v => {
     if (v.plc?.type === "bool" && typeof v.plc.bit === "number") {
       v.value = (chunk[v.plc.byte] & (0x1 << v.plc.bit)) > 0x0;
+    } else if (v.plc?.type === "int8") {
+      v.value = chunk[v.plc.byte];
     } else if (v.plc?.type === "int16") {
       v.value = (chunk[v.plc.byte] << 0x8) + chunk[v.plc.byte + 0x1];
     }

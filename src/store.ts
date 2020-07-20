@@ -6,7 +6,7 @@ import chalk from "chalk";
 export type VariableValueType = boolean | number;
 
 interface PlcDataType {
-  type: "bool" | "int16";
+  type: "bool" | "int8" | "int16";
   action: "read" | "write";
   byte: number;
   bit?: number;
