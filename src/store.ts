@@ -18,6 +18,7 @@ export interface VariableJson {
   value: VariableValueType;
   toggle?: number;
   group?: string;
+  monitor?: boolean;
   plc?: PlcDataType;
 }
 
@@ -31,6 +32,7 @@ export class Variable {
   private _toggle?: number;
   private _toggleTimeout?: NodeJS.Timeout;
   public readonly group?: string;
+  public readonly monitor?: boolean;
   public plc?: PlcDataType;
 
   constructor({
@@ -39,6 +41,7 @@ export class Variable {
     value,
     toggle,
     group,
+    monitor,
     plc,
   }: {
     name: string;
@@ -46,6 +49,7 @@ export class Variable {
     value: VariableValueType;
     toggle?: number;
     group?: string;
+    monitor?: boolean;
     plc?: PlcDataType;
   }) {
     this.name = name;
@@ -54,6 +58,7 @@ export class Variable {
     this._defaultValue = value;
     this._toggle = toggle;
     this.group = group;
+    this.monitor = monitor;
     this.plc = plc;
   }
 
@@ -105,6 +110,7 @@ export function load(): Promise<void> {
                 value: v.value,
                 toggle: v.toggle,
                 group: v.group,
+                monitor: v.monitor,
                 plc: v.plc,
               }),
             );
@@ -113,6 +119,8 @@ export function load(): Promise<void> {
           if (err2) console.log(chalk.red(err2.message));
         }
       }
+
+      storeEvents.emit("variablesLoaded", variables);
 
       resolve();
     });

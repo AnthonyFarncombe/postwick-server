@@ -125,7 +125,7 @@ export default (http: Server): void => {
     });
 
     socket.on("disconnect", () => {
-      console.log(chalk.yellow(`User '${socket.id} has disconnected`));
+      console.log(chalk.yellow(`Client '${socket.id} has disconnected`));
       const index = sessions.indexOf(session);
       if (index > -1) sessions.splice(index, 1);
     });

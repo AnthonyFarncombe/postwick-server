@@ -51,7 +51,8 @@ app.get("/api/cctv", async (_req, res) => {
 
 app.get("/api/anpr", async (_req, res) => {
   try {
-    const plate = await getPlateFromImage();
+    const image = await getCCTVImage();
+    const plate = await getPlateFromImage(image.image);
     res.json({ plate });
   } catch (err) {
     res.json(err);

@@ -2,15 +2,22 @@ import { storeEvents, Variable } from "./store";
 import { sendMail } from "./email";
 import { logToDb } from "./logger";
 
+let varsToMonitor: string[] = [];
+let enableMonitor = false;
+
+storeEvents.on("variablesLoaded", (variables: Variable[]) => {
+  varsToMonitor = variables.filter(v => v.monitor).map(v => v.name);
+  setTimeout(() => (enableMonitor = true), 5000);
+});
+
 async function logEventsToDb(variable: Variable): Promise<void> {
-  try {
-    if (variable.name === "securityAlarmEnabled" && variable.value) await logToDb("SecurityAlarmEnabled");
-    else if (variable.name === "securityAlarmEnabled" && !variable.value) await logToDb("SecurityAlarmDisabled");
-  } catch (err) {}
+  if (varsToMonitor.includes(variable.name)) {
+    await logToDb({ name: variable.name, value: variable.value });
+  }
 }
 
 storeEvents.on("valueChanged", async (variable: Variable) => {
-  await logEventsToDb(variable);
+  if (enableMonitor) await logEventsToDb(variable);
 
   if (!variable.value) return;
 
