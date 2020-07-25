@@ -304,6 +304,19 @@
     }
   },
   {
+    "name": "anprResponse",
+    "text": "ANPR Response",
+    "group": "anpr",
+    "value": false,
+    "monitor": true,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 4,
+      "bit": 7
+    }
+  },
+  {
     "name": "securityAlarmEnabled",
     "text": "Security Alarm Enabled",
     "group": "alarm",
