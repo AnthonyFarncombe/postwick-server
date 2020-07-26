@@ -1,22 +1,17 @@
 {
     "cSpell.words": [
         "anpr",
-        "backoff",
-        "bigint",
         "comms",
         "downlevel",
-        "errmsg",
         "esnext",
-        "exceptionserver",
         "farncombe",
         "heathwood",
         "hmmss",
+        "hrend",
+        "hrstart",
         "interop",
-        "keepalive",
-        "modbus",
         "mongodb",
         "noreply",
-        "opcua",
         "postwick",
         "sendmail",
         "smtp",
@@ -24,9 +19,7 @@
         "tslib",
         "typechecking",
         "urllib",
-        "vancebuild",
-        "yyyymmdd",
-        "zjov"
+        "yyyymmdd"
     ],
     "editor.tabSize": 2,
     "editor.codeActionsOnSave": {

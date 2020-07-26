@@ -1,16 +1,17 @@
 import { storeEvents, Variable, variables } from "./store";
 import { getCCTVImage, ImageWithNames } from "./cctv";
 import { textFromImage } from "./aws";
-import Car, { CarType } from "./models/car";
+import Visit, { VisitType } from "./models/visit";
+import Car from "./models/car";
 
-let carPresent: CarType | null = null;
+let currentVisit: VisitType | null = null;
 
 // Requests an image from the camera
 // The camera often fails to return an image on the first request so up to three requests are made
 async function getImage(carId: string, attempts = 3): Promise<ImageWithNames> {
   let image: ImageWithNames | undefined;
 
-  while (!image && attempts > 0 && carPresent && carPresent.id === carId) {
+  while (!image && attempts > 0 && currentVisit && currentVisit.id === carId) {
     try {
       image = await getCCTVImage();
       return image;
@@ -43,10 +44,10 @@ function sendAnprResponse(): void {
   setTimeout(() => (anprResponse.value = false), 3000);
 }
 
-async function createCar(): Promise<CarType> {
-  const car = new Car({ timestamp: new Date(), approved: false });
-  await car.save();
-  return car;
+async function createVisit(): Promise<VisitType> {
+  const visit = new Visit({ timestamp: new Date(), approved: false });
+  await visit.save();
+  return visit;
 }
 
 storeEvents.on("valueChanged", async (variable: Variable) => {
@@ -56,43 +57,56 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
     if (variable.value) {
       try {
         // Save the arrival of the car to the database
-        const car = await createCar();
-        carPresent = car;
+        const visit = await createVisit();
+        currentVisit = visit;
 
         // Get an image of the car
-        const carImage = await getImage(car.id);
+        let hrstart = process.hrtime();
+        const carImage = await getImage(visit.id);
+        let hrend = process.hrtime(hrstart);
+        visit.imageCaptureDuration = hrend;
 
         // Save the file names of the images to the database
-        car.imagePathOrig = carImage.imagePathOrig;
-        car.imagePathCropped = carImage.imagePathCropped;
-        await car.save();
+        visit.imagePathOrig = carImage.imagePathOrig;
+        visit.imagePathCropped = carImage.imagePathCropped;
+        await visit.save();
 
         // Get the plate from the image and save it to the database
-        car.plateText = await getPlateFromImage(carImage.image);
-        await car.save();
+        hrstart = process.hrtime();
+        visit.plateText = await getPlateFromImage(carImage.image);
+        hrend = process.hrtime(hrstart);
+        visit.imageOcrDuration = hrend;
+        await visit.save();
 
-        // Check if this car has been previously approved
-        const previousVisit = await Car.findOne({ plateText: car.plateText, approved: true });
+        // Check if this car is authorized
+        const car = await Car.findOne({ plateText: visit.plateText });
 
-        // If this car has been previously approved then notify the PLC and save to the database
-        if (previousVisit) {
+        // If this car is authorized then notify the PLC and save to the database
+        if (car) {
           sendAnprResponse();
 
-          car.approved = true;
-          await car.save();
+          visit.approved = true;
+          visit.name = car.name;
+          visit.mobile = car.mobile;
+          await visit.save();
         }
       } catch (err) {
         console.error(err);
       }
     } else {
-      carPresent = null;
+      currentVisit = null;
     }
   } else if (variable.name === "anprApprove") {
     try {
       // If the car is still present then save the approval to the database
-      if (carPresent) {
-        carPresent.approved = true;
-        await carPresent.save();
+      if (currentVisit) {
+        currentVisit.approved = true;
+        await currentVisit.save();
+
+        const car = await Car.findOne({ plateText: currentVisit.plateText });
+        if (!car) {
+          await Car.insertMany([{ plateText: currentVisit.plateText }]);
+        }
       }
     } catch (err) {
       console.error(err);

@@ -1,19 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface CarType extends Document {
-  timestamp: Date;
-  imagePathOrig?: string;
-  imagePathCropped?: string;
-  plateText?: string;
-  approved: boolean;
+  plateText: string;
+  name?: string;
+  mobile?: string;
 }
 
 const carSchema: Schema = new Schema({
-  timestamp: { type: Date, required: true },
-  imagePathOrig: { type: String, required: false },
-  imagePathCropped: { type: String, required: false },
-  plateText: { type: String, required: false },
-  approved: { type: Boolean, required: true },
+  plateText: { type: String, required: true },
+  name: { type: String, required: false },
+  mobile: { type: String, required: false },
 });
 
 export default mongoose.model<CarType>("Car", carSchema);
