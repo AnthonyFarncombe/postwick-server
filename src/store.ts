@@ -1,9 +1,17 @@
 import path from "path";
 import fs from "fs";
-import { EventEmitter } from "events";
 import chalk from "chalk";
+import { EventEmitter } from "events";
+import VariableLog from "./models/variableLog";
 
 export type VariableValueType = boolean | number;
+
+async function logToDb(variable: Variable): Promise<void> {
+  try {
+    const variableLog = new VariableLog({ timestamp: new Date(), name: variable.name, value: variable.value });
+    await variableLog.save();
+  } catch (err) {}
+}
 
 interface PlcDataType {
   type: "bool" | "int8" | "int16";
@@ -18,7 +26,7 @@ export interface VariableJson {
   value: VariableValueType;
   toggle?: number;
   group?: string;
-  monitor?: boolean;
+  log?: boolean;
   plc?: PlcDataType;
 }
 
@@ -32,7 +40,7 @@ export class Variable {
   private _toggle?: number;
   private _toggleTimeout?: NodeJS.Timeout;
   public readonly group?: string;
-  public readonly monitor?: boolean;
+  public readonly log?: boolean;
   public plc?: PlcDataType;
 
   constructor({
@@ -41,7 +49,7 @@ export class Variable {
     value,
     toggle,
     group,
-    monitor,
+    log,
     plc,
   }: {
     name: string;
@@ -49,7 +57,7 @@ export class Variable {
     value: VariableValueType;
     toggle?: number;
     group?: string;
-    monitor?: boolean;
+    log?: boolean;
     plc?: PlcDataType;
   }) {
     this.name = name;
@@ -58,7 +66,7 @@ export class Variable {
     this._defaultValue = value;
     this._toggle = toggle;
     this.group = group;
-    this.monitor = monitor;
+    this.log = log;
     this.plc = plc;
   }
 
@@ -80,6 +88,7 @@ export class Variable {
     this._value = newValue;
 
     storeEvents.emit("valueChanged", this);
+    if (this.log) logToDb(this);
 
     if (this._toggle) {
       this._toggleTimeout && clearTimeout(this._toggleTimeout);
@@ -110,7 +119,7 @@ export function load(): Promise<void> {
                 value: v.value,
                 toggle: v.toggle,
                 group: v.group,
-                monitor: v.monitor,
+                log: v.log,
                 plc: v.plc,
               }),
             );

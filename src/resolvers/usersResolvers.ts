@@ -3,8 +3,7 @@ import bcrypt from "bcryptjs";
 import User, { UserType } from "../models/user";
 import { ApolloContext } from "../server";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const usersResolvers: IResolvers<any, ApolloContext> = {
+const usersResolvers: IResolvers<unknown, ApolloContext> = {
   Query: {
     async users(_parent, _args, context): Promise<UserType[]> {
       if (!context.user || !context.user.roles.includes("users")) throw new AuthenticationError("Access denied!");

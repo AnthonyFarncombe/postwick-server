@@ -14,8 +14,7 @@ function mapVariablesToGql(variables: Variable[]): GqlVariableType[] {
   return variables.map(v => ({ name: v.name, text: v.text, value: v.value, group: v.group }));
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const variablesResolvers: IResolvers<any, ApolloContext> = {
+const variablesResolvers: IResolvers<unknown, ApolloContext> = {
   BoolOrInt: new GraphQLScalarType({
     name: "BoolOrInt",
     description: "Variable value type",

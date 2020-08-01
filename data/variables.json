@@ -282,7 +282,7 @@
     "text": "ANPR Trigger",
     "group": "anpr",
     "value": false,
-    "monitor": true,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -295,7 +295,7 @@
     "text": "ANPR Approve",
     "group": "anpr",
     "value": false,
-    "monitor": true,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -308,7 +308,7 @@
     "text": "ANPR Response",
     "group": "anpr",
     "value": false,
-    "monitor": true,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -321,7 +321,7 @@
     "text": "Security Alarm Enabled",
     "group": "alarm",
     "value": false,
-    "monitor": true,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -334,7 +334,7 @@
     "text": "Security Alarm Triggered",
     "group": "alarm",
     "value": false,
-    "monitor": true,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -347,7 +347,7 @@
     "text": "Fire Alarm Triggered",
     "group": "alarm",
     "value": false,
-    "monitor": true,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -360,7 +360,7 @@
     "text": "Gate Entry Beam",
     "group": "gate",
     "value": false,
-    "monitor": true,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -373,7 +373,7 @@
     "text": "Gate Closed",
     "group": "gate",
     "value": false,
-    "monitor": true,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -386,7 +386,7 @@
     "text": "Gate Moving",
     "group": "gate",
     "value": false,
-    "monitor": true,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",

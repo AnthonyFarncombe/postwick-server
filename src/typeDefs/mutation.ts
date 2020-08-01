@@ -11,5 +11,9 @@ export default gql`
     deleteUser(id: ID!): ID!
 
     setVariableValue(name: String!, value: Int!): Variable!
+
+    createCar(car: CreateCarInput): Car!
+    updateCar(car: UpdateCarInput): Car!
+    deleteCar(id: ID!): ID!
   }
 `;

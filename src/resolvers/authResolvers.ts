@@ -11,12 +11,12 @@ import User from "../models/user";
 import { JwtPayload } from "../auth";
 import { sendMail } from "../email";
 
-const authResolvers: IResolvers = {
+const authResolvers: IResolvers<unknown, JwtPayload> = {
   Mutation: {
     async login(
       _parent,
       { email, password }: { email: string; password: string },
-      context: JwtPayload,
+      context,
     ): Promise<{ userId: string; token: string; tokenExpiration: number }> {
       try {
         const user = await User.findOne({ email });
@@ -103,7 +103,8 @@ const authResolvers: IResolvers = {
 
         const passwordHash = await bcrypt.hash(password, 10);
         await User.findByIdAndUpdate(user._id, {
-          $set: { passwordHash, resetToken: undefined, resetExpires: undefined },
+          $set: { passwordHash },
+          $unset: { resetToken: 1, resetExpires: 1 },
         });
 
         return true;
