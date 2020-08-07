@@ -23,6 +23,32 @@ async function getImage(carId: string, attempts = 3): Promise<ImageWithNames> {
   throw new Error("Unable to get image from camera!");
 }
 
+function adjustPlate(plateText: string): string {
+  if (!plateText) return plateText;
+  plateText = plateText.toUpperCase();
+
+  const match = /\w{4}\s\w{3}/.exec(plateText);
+  if (match && match.length) plateText = match[0];
+  else return plateText;
+
+  if (plateText.substr(0, 1) === "0") plateText = `O${plateText.substr(1)}`;
+  if (plateText.substr(0, 1) === "1") plateText = `I${plateText.substr(1)}`;
+  if (plateText.substr(1, 1) === "0") plateText = `${plateText.substr(0, 1)}O${plateText.substr(2)}`;
+  if (plateText.substr(1, 1) === "1") plateText = `${plateText.substr(0, 1)}I${plateText.substr(2)}`;
+  if (plateText.substr(2, 1) === "O") plateText = `${plateText.substr(0, 2)}0${plateText.substr(3)}`;
+  if (plateText.substr(2, 1) === "I") plateText = `${plateText.substr(0, 2)}1${plateText.substr(3)}`;
+  if (plateText.substr(3, 1) === "O") plateText = `${plateText.substr(0, 3)}0${plateText.substr(4)}`;
+  if (plateText.substr(3, 1) === "I") plateText = `${plateText.substr(0, 3)}1${plateText.substr(4)}`;
+  if (plateText.substr(5, 1) === "0") plateText = `${plateText.substr(0, 5)}O${plateText.substr(6)}`;
+  if (plateText.substr(5, 1) === "1") plateText = `${plateText.substr(0, 5)}I${plateText.substr(6)}`;
+  if (plateText.substr(6, 1) === "0") plateText = `${plateText.substr(0, 6)}O${plateText.substr(7)}`;
+  if (plateText.substr(6, 1) === "1") plateText = `${plateText.substr(0, 6)}I${plateText.substr(7)}`;
+  if (plateText.substr(7, 1) === "0") plateText = `${plateText.substr(0, 7)}O`;
+  if (plateText.substr(7, 1) === "1") plateText = `${plateText.substr(0, 7)}I`;
+
+  return plateText;
+}
+
 // Send image to AWS to extract the text
 export async function getPlateFromImage(image: Buffer): Promise<string> {
   const rekognitionResult = await textFromImage(image);
@@ -33,7 +59,9 @@ export async function getPlateFromImage(image: Buffer): Promise<string> {
   const plateLine = rekognitionResult.TextDetections.find(d => d.Type === "LINE");
   if (!plateLine || !plateLine.DetectedText) throw new Error("No line detected in image!");
 
-  return plateLine.DetectedText;
+  const plateText = adjustPlate(plateLine.DetectedText);
+
+  return plateText;
 }
 
 // Send a pulse to the PLC to signify the vehicle is on the whitelist
@@ -78,18 +106,28 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
         visit.imageOcrDuration = hrend;
         await visit.save();
 
-        // Check if this car is authorized
+        // Find the car if it exists
         const car = await Car.findOne({ plateText: visit.plateText });
 
-        // If this car is authorized then notify the PLC and save to the database
-        if (car) {
-          sendAnprResponse();
+        // Check if the car has been approved in the meantime
+        if (visit.approved) {
+          // Save the car if it doesn't already exist
+          if (!car) {
+            await Car.insertMany([{ plateText: visit.plateText }]);
+          }
+        } else {
+          // If this car is authorized then notify the PLC and save to the database
+          if (car) {
+            sendAnprResponse();
 
-          visit.approved = true;
-          visit.name = car.name;
-          visit.mobile = car.mobile;
-          await visit.save();
+            visit.approved = true;
+            visit.name = car.name;
+            visit.mobile = car.mobile;
+            await visit.save();
+          }
         }
+
+        storeEvents.emit("anprSuccess", visit);
       } catch (err) {
         console.error(err);
       }
@@ -103,9 +141,11 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
         currentVisit.approved = true;
         await currentVisit.save();
 
-        const car = await Car.findOne({ plateText: currentVisit.plateText });
-        if (!car) {
-          await Car.insertMany([{ plateText: currentVisit.plateText }]);
+        if (currentVisit.plateText) {
+          const car = await Car.findOne({ plateText: currentVisit.plateText });
+          if (!car) {
+            await Car.insertMany([{ plateText: currentVisit.plateText }]);
+          }
         }
       }
     } catch (err) {

@@ -21,10 +21,10 @@ export async function getCCTVImage(): Promise<ImageWithNames> {
   const jimpImage = await Jimp.read(data);
 
   jimpImage.crop(
+    jimpImage.getWidth() * 0.32,
+    jimpImage.getHeight() * 0.3,
     jimpImage.getWidth() * 0.25,
     jimpImage.getHeight() * 0.25,
-    jimpImage.getWidth() * 0.5,
-    jimpImage.getHeight() * 0.5,
   );
 
   // Save images to archive
@@ -42,7 +42,7 @@ export async function getCCTVImage(): Promise<ImageWithNames> {
       jimpImage.writeAsync(imagePathCropped).catch(err => console.error(err));
     }
   } catch (err) {
-    //
+    console.error(err);
   }
 
   const image = await jimpImage.getBufferAsync("image/jpeg");

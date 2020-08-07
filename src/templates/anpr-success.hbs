@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Postwick ANPR Notification</title>
+</head>
+
+<body>
+  <div>
+    <h4>Vehicle with reg <b>{{ plateText }}</b> detected.</h4>
+    {{#if name}}
+    <h5>The driver is {{ name }}.</h5>
+    {{#/if}}
+  </div>
+</body>
+
+</html>
