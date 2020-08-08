@@ -7,6 +7,7 @@ import chalk from "chalk";
 import socketModule from "./socket";
 import { getCCTVImage } from "./cctv";
 import { getPlateFromImage } from "./anpr";
+import Visit from "./models/visit";
 
 import { getUserFromRequest, UserContext } from "./auth";
 
@@ -39,11 +40,26 @@ app.get("/api", (_req, res) => {
   res.json({ hello: "world" });
 });
 
-app.get("/api/cctv", async (_req, res) => {
+app.get("/api/cctv/:type?/:id?", async (req, res) => {
   try {
-    const image = await getCCTVImage();
-    res.contentType("image/jpeg");
-    res.send(image);
+    if (req.params.type && /^(orig|cropped)$/.test(req.params.type) && req.params.id) {
+      const visit = await Visit.findById(req.params.id);
+      if (visit) {
+        const filename = req.params.type === "cropped" ? visit.imagePathCropped : visit.imagePathOrig;
+        if (filename) {
+          res.sendFile(filename);
+        } else {
+          res.sendStatus(404);
+        }
+      } else {
+        res.sendStatus(404);
+        return;
+      }
+    } else {
+      const image = await getCCTVImage();
+      res.contentType("image/jpeg");
+      res.send(image);
+    }
   } catch (err) {
     res.json(err);
   }
