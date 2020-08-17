@@ -23,12 +23,13 @@ export async function sendMail({
   template,
   subject,
   context,
+  attachments,
 }: {
   to: string | Mail.Address | (string | Mail.Address)[];
   template: string;
   subject: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context: any;
+  context: unknown;
+  attachments?: Mail.Attachment[];
 }): Promise<void> {
   const source = await new Promise((resolve, reject): void => {
     fs.readFile(`./src/templates/${template}.hbs`, "utf8", (err, data) => {
@@ -38,5 +39,5 @@ export async function sendMail({
   });
 
   const html = handlebars.compile(source)(context);
-  await transporter.sendMail({ to, subject, html });
+  await transporter.sendMail({ to, subject, html, attachments });
 }

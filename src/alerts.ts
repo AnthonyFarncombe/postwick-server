@@ -3,6 +3,7 @@ import { sendMail } from "./email";
 import VariableLog from "./models/variableLog";
 import { VisitType } from "./models/visit";
 import User from "./models/user";
+import Mail from "nodemailer/lib/mailer";
 
 let varsToLog: string[] = [];
 let enableLogging = false;
@@ -76,9 +77,44 @@ storeEvents.on("anprSuccess", async (visit: VisitType) => {
       sendMail({
         to: { address: u.email, name: `${u.firstName} ${u.lastName}` },
         template: "anpr-success",
-        subject: "Postwick ANPR Notification",
+        subject: "Postwick ANPR Notification - Success",
         context: visit,
+        attachments: [
+          { filename: visit.imagePathOrig?.replace(/^.*[\\\/]/, ""), path: visit.imagePathOrig },
+          { filename: visit.imagePathCropped?.replace(/^.*[\\\/]/, ""), path: visit.imagePathCropped },
+        ],
       });
     });
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+storeEvents.on("anprError", async ({ err, visit }: { err: unknown; visit: VisitType | undefined }) => {
+  try {
+    const context = (err && JSON.stringify(err)) || "Error unknown";
+    const users = await User.find({ notifications: "anpr" });
+
+    const attachments: Mail.Attachment[] = [];
+    if (visit) {
+      if (visit.imagePathOrig) {
+        attachments.push({ filename: visit.imagePathOrig?.replace(/^.*[\\\/]/, ""), path: visit.imagePathOrig });
+      }
+      if (visit.imagePathCropped) {
+        attachments.push({ filename: visit.imagePathCropped?.replace(/^.*[\\\/]/, ""), path: visit.imagePathCropped });
+      }
+    }
+
+    users.forEach(u => {
+      sendMail({
+        to: { address: u.email, name: `${u.firstName} ${u.lastName}` },
+        template: "anpr-error",
+        subject: "Postwick ANPR Notification - Error",
+        context,
+        attachments,
+      });
+    });
+  } catch (err) {
+    console.error(err);
+  }
 });

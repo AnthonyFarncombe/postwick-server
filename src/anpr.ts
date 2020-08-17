@@ -83,9 +83,11 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
 
   if (variable.name === "anprTrigger") {
     if (variable.value) {
+      let visit: VisitType | undefined;
+
       try {
         // Save the arrival of the car to the database
-        const visit = await createVisit();
+        visit = await createVisit();
         currentVisit = visit;
 
         // Get an image of the car
@@ -130,6 +132,7 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
         storeEvents.emit("anprSuccess", visit);
       } catch (err) {
         console.error(err);
+        storeEvents.emit("anprError", { err, visit });
       }
     } else {
       currentVisit = null;
@@ -150,6 +153,7 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
       }
     } catch (err) {
       console.error(err);
+      storeEvents.emit("anprError", err);
     }
   }
 });
