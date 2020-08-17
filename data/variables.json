@@ -403,5 +403,83 @@
       "byte": 4,
       "bit": 7
     }
+  },
+  {
+    "name": "moistureSensorDishFront",
+    "text": "Dish Front",
+    "group": "water",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 36,
+      "bit": 0
+    }
+  },
+  {
+    "name": "moistureSensorDishRear",
+    "text": "Dish Rear",
+    "group": "water",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 36,
+      "bit": 1
+    }
+  },
+  {
+    "name": "moistureSensorGentsToilets",
+    "text": "Gents Toilets",
+    "group": "water",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 36,
+      "bit": 2
+    }
+  },
+  {
+    "name": "moistureSensorLadiesToilets",
+    "text": "Ladies Toilets",
+    "group": "water",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 36,
+      "bit": 3
+    }
+  },
+  {
+    "name": "moistureSensorReturnAirNorth",
+    "text": "Return Air North",
+    "group": "water",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 36,
+      "bit": 4
+    }
+  },
+  {
+    "name": "moistureSensorReturnAirSouth",
+    "text": "Return Air South",
+    "group": "water",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 36,
+      "bit": 5
+    }
   }
 ]

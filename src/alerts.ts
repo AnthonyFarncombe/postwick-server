@@ -13,20 +13,18 @@ storeEvents.on("variablesLoaded", (variables: Variable[]) => {
 });
 
 async function logEventsToDb(variable: Variable): Promise<void> {
-  if (varsToLog.includes(variable.name)) {
-    try {
+  try {
+    if (varsToLog.includes(variable.name)) {
       const variableLog = new VariableLog({ timestamp: new Date(), name: variable.name, value: variable.value });
       await variableLog.save();
-    } catch (err) {
-      console.error(err);
     }
+  } catch (err) {
+    console.error(err);
   }
 }
 
-storeEvents.on("valueChanged", async (variable: Variable) => {
+async function alarmAlerts(variable: Variable): Promise<void> {
   try {
-    if (enableLogging) await logEventsToDb(variable);
-
     if (!variable.value) return;
 
     const match = /^([a-z]+)AlarmTriggered$/.exec(variable.name);
@@ -44,6 +42,31 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
   } catch (err) {
     console.error(err);
   }
+}
+
+async function waterAlerts(variable: Variable): Promise<void> {
+  try {
+    if (variable.value || !/^moistureSensor/.test(variable.name)) return;
+
+    const users = await User.find({ notifications: "water" });
+    if (!users) return;
+
+    sendMail({
+      to: users.map(u => ({ name: `${u.firstName} ${u.lastName}`, address: u.email })),
+      template: "water",
+      subject: "Postwick - Moisture Sensor Triggered!",
+      context: { location: variable.text?.toLowerCase() },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+storeEvents.on("valueChanged", async (variable: Variable) => {
+  if (!enableLogging) return;
+  await logEventsToDb(variable);
+  await alarmAlerts(variable);
+  await waterAlerts(variable);
 });
 
 storeEvents.on("anprSuccess", async (visit: VisitType) => {
