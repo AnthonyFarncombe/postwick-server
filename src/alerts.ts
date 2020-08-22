@@ -73,12 +73,12 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
 storeEvents.on("anprSuccess", async (visit: VisitType) => {
   try {
     const users = await User.find({ notifications: "anpr" });
-    users.forEach(u => {
-      sendMail({
+    users.forEach(async u => {
+      await sendMail({
         to: { address: u.email, name: `${u.firstName} ${u.lastName}` },
         template: "anpr-success",
         subject: "Postwick ANPR Notification - Success",
-        context: visit,
+        context: { plateText: visit.plateText, name: visit.name },
         attachments: [
           { filename: visit.imagePathOrig?.replace(/^.*[\\\/]/, ""), path: visit.imagePathOrig },
           { filename: visit.imagePathCropped?.replace(/^.*[\\\/]/, ""), path: visit.imagePathCropped },

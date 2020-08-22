@@ -31,13 +31,17 @@ export async function sendMail({
   context: unknown;
   attachments?: Mail.Attachment[];
 }): Promise<void> {
-  const source = await new Promise((resolve, reject): void => {
-    fs.readFile(`./src/templates/${template}.hbs`, "utf8", (err, data) => {
-      if (err) reject(err);
-      else resolve(data);
+  try {
+    const source = await new Promise((resolve, reject): void => {
+      fs.readFile(`./src/templates/${template}.hbs`, "utf8", (err, data) => {
+        if (err) reject(err);
+        else resolve(data);
+      });
     });
-  });
 
-  const html = handlebars.compile(source)(context);
-  await transporter.sendMail({ to, subject, html, attachments });
+    const html = handlebars.compile(source)(context);
+    await transporter.sendMail({ to, subject, html, attachments });
+  } catch (err) {
+    console.error(err);
+  }
 }
