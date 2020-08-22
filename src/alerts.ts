@@ -1,3 +1,4 @@
+import path from "path";
 import { storeEvents, Variable } from "./store";
 import { sendMail } from "./email";
 import VariableLog from "./models/variableLog";
@@ -72,6 +73,22 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
 
 storeEvents.on("anprSuccess", async (visit: VisitType) => {
   try {
+    const attachments: Mail.Attachment[] = [];
+    if (visit && process.env.CCTV_ARCHIVE) {
+      if (visit.imageNameOrig) {
+        attachments.push({
+          filename: visit.imageNameOrig,
+          path: path.resolve(process.env.CCTV_ARCHIVE, visit.imageNameOrig),
+        });
+      }
+      if (visit.imageNameCropped) {
+        attachments.push({
+          filename: visit.imageNameCropped,
+          path: path.resolve(process.env.CCTV_ARCHIVE, visit.imageNameCropped),
+        });
+      }
+    }
+
     const users = await User.find({ notifications: "anpr" });
     users.forEach(async u => {
       await sendMail({
@@ -79,10 +96,7 @@ storeEvents.on("anprSuccess", async (visit: VisitType) => {
         template: "anpr-success",
         subject: "Postwick ANPR Notification - Success",
         context: { plateText: visit.plateText, name: visit.name },
-        attachments: [
-          { filename: visit.imagePathOrig?.replace(/^.*[\\\/]/, ""), path: visit.imagePathOrig },
-          { filename: visit.imagePathCropped?.replace(/^.*[\\\/]/, ""), path: visit.imagePathCropped },
-        ],
+        attachments,
       });
     });
   } catch (err) {
@@ -92,16 +106,22 @@ storeEvents.on("anprSuccess", async (visit: VisitType) => {
 
 storeEvents.on("anprError", async ({ err, visit }: { err: unknown; visit: VisitType | undefined }) => {
   try {
-    const context = (err && JSON.stringify(err)) || "Error unknown";
+    const context = { err: (err && JSON.stringify(err)) || "Error unknown" };
     const users = await User.find({ notifications: "anpr" });
 
     const attachments: Mail.Attachment[] = [];
-    if (visit) {
-      if (visit.imagePathOrig) {
-        attachments.push({ filename: visit.imagePathOrig?.replace(/^.*[\\\/]/, ""), path: visit.imagePathOrig });
+    if (visit && process.env.CCTV_ARCHIVE) {
+      if (visit.imageNameOrig) {
+        attachments.push({
+          filename: visit.imageNameOrig,
+          path: path.resolve(process.env.CCTV_ARCHIVE, visit.imageNameOrig),
+        });
       }
-      if (visit.imagePathCropped) {
-        attachments.push({ filename: visit.imagePathCropped?.replace(/^.*[\\\/]/, ""), path: visit.imagePathCropped });
+      if (visit.imageNameCropped) {
+        attachments.push({
+          filename: visit.imageNameCropped,
+          path: path.resolve(process.env.CCTV_ARCHIVE, visit.imageNameCropped),
+        });
       }
     }
 

@@ -1,3 +1,4 @@
+import path from "path";
 import http from "http";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
@@ -45,9 +46,9 @@ app.get("/api/cctv/:type?/:id?", async (req, res) => {
     if (req.params.type && /^(orig|cropped)$/.test(req.params.type) && req.params.id) {
       const visit = await Visit.findById(req.params.id);
       if (visit) {
-        const filename = req.params.type === "cropped" ? visit.imagePathCropped : visit.imagePathOrig;
-        if (filename) {
-          res.sendFile(filename);
+        const filename = req.params.type === "cropped" ? visit.imageNameCropped : visit.imageNameOrig;
+        if (filename && process.env.CCTV_ARCHIVE) {
+          res.sendFile(path.resolve(process.env.CCTV_ARCHIVE, filename));
         } else {
           res.sendStatus(404);
         }

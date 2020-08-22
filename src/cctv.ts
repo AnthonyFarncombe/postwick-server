@@ -6,8 +6,8 @@ import moment from "moment";
 
 export interface ImageWithNames {
   image: Buffer;
-  imagePathOrig: string | undefined;
-  imagePathCropped: string | undefined;
+  imageNameOrig: string | undefined;
+  imageNameCropped: string | undefined;
 }
 
 export async function getCCTVImage(): Promise<ImageWithNames> {
@@ -28,17 +28,14 @@ export async function getCCTVImage(): Promise<ImageWithNames> {
   );
 
   // Save images to archive
-  let imagePathOrig: string | undefined;
-  let imagePathCropped: string | undefined;
+  const imageNameOrig = `gate_${moment().format("YYYYMMDD_HHmmss")}.jpg`;
+  const imageNameCropped = `gate_cropped_${moment().format("YYYYMMDD_HHmmss")}.jpg`;
   try {
     if (process.env.CCTV_ARCHIVE) {
-      imagePathOrig = path.resolve(process.env.CCTV_ARCHIVE, `gate_${moment().format("YYYYMMDD_HHmmss")}.jpg`);
+      const imagePathOrig = path.resolve(process.env.CCTV_ARCHIVE, imageNameOrig);
       fs.writeFile(imagePathOrig, data, err => err && console.error(err));
 
-      imagePathCropped = path.resolve(
-        process.env.CCTV_ARCHIVE,
-        `gate_cropped_${moment().format("YYYYMMDD_HHmmss")}.jpg`,
-      );
+      const imagePathCropped = path.resolve(process.env.CCTV_ARCHIVE, imageNameCropped);
       jimpImage.writeAsync(imagePathCropped).catch(err => console.error(err));
     }
   } catch (err) {
@@ -47,5 +44,5 @@ export async function getCCTVImage(): Promise<ImageWithNames> {
 
   const image = await jimpImage.getBufferAsync("image/jpeg");
 
-  return { image, imagePathOrig, imagePathCropped };
+  return { image, imageNameOrig, imageNameCropped };
 }
