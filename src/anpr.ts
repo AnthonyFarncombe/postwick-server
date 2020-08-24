@@ -97,8 +97,8 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
         visit.imageCaptureDuration = hrend;
 
         // Save the file names of the images to the database
-        visit.imagePathOrig = carImage.imagePathOrig;
-        visit.imagePathCropped = carImage.imagePathCropped;
+        visit.imageNameOrig = carImage.imageNameOrig;
+        visit.imageNameCropped = carImage.imageNameCropped;
         await visit.save();
 
         // Get the plate from the image and save it to the database

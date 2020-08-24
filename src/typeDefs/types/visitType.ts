@@ -6,8 +6,8 @@ export const visitType = gql`
     timestamp: String!
     imageCaptureDuration: [Float!]
     imageOcrDuration: [Float!]
-    imagePathOrig: String
-    imagePathCropped: String
+    imageNameOrig: String
+    imageNameCropped: String
     plateText: String
     approved: Boolean!
     name: String
