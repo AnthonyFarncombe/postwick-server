@@ -3,9 +3,11 @@ import { Server } from "http";
 import chalk from "chalk";
 import store, { storeEvents, Variable } from "./store";
 import Schedule, { ScheduleType } from "./models/schedule";
+import { login } from "./auth";
 
 interface Session {
   socket: socket.Socket;
+  authenticated: boolean;
 }
 
 interface ScheduleSocketType {
@@ -32,10 +34,36 @@ export default (http: Server): void => {
   const io = socket(http, { origins: "*:*" });
 
   io.on("connection", socket => {
-    const session: Session = { socket };
+    const authenticated = new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(socket.handshake.address);
+    console.log(authenticated, socket.handshake.address);
+    const session: Session = { socket, authenticated };
+
     sessions.push(session);
 
     console.log(chalk.green(`Client '${socket.id}' has connected`));
+
+    socket.on("getAuthenticationState", (_, fn) => fn && typeof fn === "function" && fn(session.authenticated));
+
+    socket.on("login", async (data: { email: string; password: string }, fn: Function) => {
+      if (!fn || typeof fn !== "function") return;
+
+      if (new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(socket.handshake.address)) {
+        //
+      }
+
+      try {
+        const response = await login({ email: data.email, password: data.password, ip: socket.handshake.address });
+        fn(response);
+      } catch (err) {
+        console.log(JSON.stringify(err));
+        fn({ error: err });
+      }
+    });
+
+    socket.on("loginJwt", (data: { token: string }, fn: Function) => {
+      console.log(data);
+      fn && typeof fn === "function" && fn(data);
+    });
 
     socket.on("setVariableValue", (data: { name: string; value: boolean | number }, fn: Function) => {
       if (data && data.name) {

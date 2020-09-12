@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
 import { Request } from "express";
+import User from "./models/user";
 
 export interface UserContext {
   userId: string;
@@ -48,4 +50,40 @@ export function getUserFromRequest(req: Request): Promise<UserContext> {
       return reject(err);
     }
   });
+}
+
+export async function login({
+  email,
+  password,
+  ip,
+}: {
+  email: string;
+  password: string;
+  ip: string;
+}): Promise<{ userId: string; token: string; tokenExpiration: number }> {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error();
+
+    const isEqual = await bcrypt.compare(password, user.passwordHash || "");
+    if (!isEqual) throw "Incorrect password";
+
+    const payload: JwtPayload = {
+      userId: user.id,
+      roles: user.roles || [],
+      ip: ip,
+    };
+
+    const privateKey = fs.readFileSync(path.resolve(__dirname, "../private.key"), "utf8");
+    if (!privateKey) throw "Private key not found!";
+
+    const token = jwt.sign(payload, privateKey, {
+      expiresIn: "12h",
+      algorithm: "RS256",
+    });
+
+    return { userId: user.id, token, tokenExpiration: 12 };
+  } catch (err) {
+    throw "Email or password is incorrect!";
+  }
 }

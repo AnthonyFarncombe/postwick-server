@@ -53,10 +53,12 @@ function adjustPlate(plateText: string): string {
 export async function getPlateFromImage(image: Buffer): Promise<string> {
   const rekognitionResult = await textFromImage(image);
 
-  if (!rekognitionResult.TextDetections || rekognitionResult.TextDetections.length === 0)
-    throw new Error("No text detected!");
+  const textDetections = (rekognitionResult.TextDetections || []).filter(d => d.Type === "LINE");
+  if (!textDetections || textDetections.length === 0) throw new Error("No text detected!");
 
-  const plateLine = rekognitionResult.TextDetections.find(d => d.Type === "LINE");
+  textDetections.sort((a, b) => ((a.Confidence || 0) < (b.Confidence || 0) ? 1 : -1));
+
+  const plateLine = textDetections[0];
   if (!plateLine || !plateLine.DetectedText) throw new Error("No line detected in image!");
 
   const plateText = adjustPlate(plateLine.DetectedText);
