@@ -10,6 +10,11 @@ export interface ImageWithNames {
   imageNameCropped: string | undefined;
 }
 
+export interface GateFaceImageWithName {
+  image: Buffer;
+  imageName: string | undefined;
+}
+
 export async function getCCTVImage(): Promise<ImageWithNames> {
   const url: string = process.env.CCTV_URL || "";
   const username = process.env.CCTV_USERNAME;
@@ -45,4 +50,17 @@ export async function getCCTVImage(): Promise<ImageWithNames> {
   const image = await jimpImage.getBufferAsync("image/jpeg");
 
   return { image, imageNameOrig, imageNameCropped };
+}
+
+export async function getGateFaceImage(): Promise<GateFaceImageWithName> {
+  const url: string = process.env.CCTV_GATE_FACE_URL || "";
+  const username = process.env.CCTV_USERNAME;
+  const password = process.env.CCTV_PASSWORD;
+
+  const { res, data } = await urllib.request(url, { digestAuth: `${username}:${password}`, timeout: [15000, 15000] });
+  if (res.statusCode !== 200) throw new Error("Unable to download image!");
+
+  const imageName = `gate_face_${moment().format("YYYYMMDD_HHmmss")}.jpg`;
+
+  return { image: data, imageName };
 }

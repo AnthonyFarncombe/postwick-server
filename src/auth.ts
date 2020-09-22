@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
-import { Request } from "express";
+import { Request, Response, NextFunction } from "express";
 import User from "./models/user";
 
 export interface UserContext {
@@ -16,18 +16,18 @@ export interface JwtPayload extends UserContext {
   ip: string;
 }
 
-export function getUserFromRequest(req: Request): Promise<UserContext> {
-  return new Promise((resolve, reject): void => {
-    try {
-      const bearerHeader = req.headers.authorization || "";
+export async function getUserFromRequest(req: Request): Promise<UserContext> {
+  try {
+    const bearerHeader = req.headers.authorization || "";
 
-      if (!bearerHeader || typeof bearerHeader !== "string") return reject();
-      const bearer = bearerHeader.split(" ");
-      const bearerToken = bearer[1];
+    if (!bearerHeader || typeof bearerHeader !== "string") throw new Error("No bearer header!");
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
 
-      const publicKey = fs.readFileSync(path.resolve(__dirname, "../public.key"), "utf8");
-      if (!publicKey) throw new Error("Public key not found!");
+    const publicKey = fs.readFileSync(path.resolve(__dirname, "../public.key"), "utf8");
+    if (!publicKey) throw new Error("Public key not found!");
 
+    const userContext: UserContext = await new Promise((resolve, reject) => {
       jwt.verify(bearerToken, publicKey, (err, decoded) => {
         if (err) return reject(err);
 
@@ -36,20 +36,43 @@ export function getUserFromRequest(req: Request): Promise<UserContext> {
         if (!payload || !payload.exp || Date.now() >= payload.exp * 1000)
           return reject(new Error("JWT token has expired!"));
 
-        if (req.connection.remoteAddress !== "::1" && payload.ip !== req.connection.remoteAddress)
-          return reject("IP address does not match!");
+        // if (req.connection.remoteAddress !== "::1" && payload.ip !== req.connection.remoteAddress)
+        //   return reject("IP address does not match!");
 
-        const userContext: UserContext = {
+        resolve({
           userId: payload.userId,
           roles: payload.roles,
-        };
-
-        resolve(userContext);
+        });
       });
-    } catch (err) {
-      return reject(err);
+    });
+
+    return userContext;
+  } catch (err) {
+    const isLocal = req.connection.remoteAddress === "::1";
+    if (isLocal) {
+      const userContext: UserContext = {
+        userId: "",
+        roles: [],
+      };
+      return userContext;
+    } else {
+      throw err;
     }
-  });
+  }
+}
+
+export function authMiddleware(role?: string): (req: Request, res: Response, next: NextFunction) => void {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    getUserFromRequest(req)
+      .then(userContext => {
+        if (role && !userContext.roles.includes(role)) {
+          res.sendStatus(401);
+        } else {
+          next();
+        }
+      })
+      .catch(() => res.sendStatus(401));
+  };
 }
 
 export async function login({
