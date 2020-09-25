@@ -48,7 +48,9 @@ export async function getUserFromRequest(req: Request): Promise<UserContext> {
 
     return userContext;
   } catch (err) {
-    const isLocal = req.connection.remoteAddress === "::1";
+    const isLocal =
+      req.connection.remoteAddress === "::1" ||
+      new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(req.connection.remoteAddress || "");
     if (isLocal) {
       const userContext: UserContext = {
         userId: "",

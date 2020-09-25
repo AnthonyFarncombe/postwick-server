@@ -6,6 +6,7 @@ export interface UserType extends Document {
   email: string;
   mobile: string;
   passwordHash: string;
+  hmiPin: string;
   roles: string[];
   notifications: string[];
   resetToken: string;
@@ -18,6 +19,7 @@ const userSchema: Schema = new Schema({
   email: { type: String, required: true },
   mobile: { type: String },
   passwordHash: { type: String },
+  hmiPin: { type: String },
   roles: [String],
   notifications: [String],
   resetToken: String,

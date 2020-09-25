@@ -7,7 +7,6 @@ import { login } from "./auth";
 
 interface Session {
   socket: socket.Socket;
-  authenticated: boolean;
 }
 
 interface ScheduleSocketType {
@@ -34,15 +33,11 @@ export default (http: Server): void => {
   const io = socket(http, { origins: "*:*" });
 
   io.on("connection", socket => {
-    const authenticated = new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(socket.handshake.address);
-    console.log(authenticated, socket.handshake.address);
-    const session: Session = { socket, authenticated };
+    const session: Session = { socket };
 
     sessions.push(session);
 
     console.log(chalk.green(`Client '${socket.id}' has connected`));
-
-    socket.on("getAuthenticationState", (_, fn) => fn && typeof fn === "function" && fn(session.authenticated));
 
     socket.on("login", async (data: { email: string; password: string }, fn: Function) => {
       if (!fn || typeof fn !== "function") return;
@@ -79,9 +74,23 @@ export default (http: Server): void => {
     });
 
     socket.on("getVariables", (_data: object, fn: Function) => {
-      fn &&
-        typeof fn === "function" &&
-        fn(store.variables.map(v => ({ name: v.name, text: v.text, value: v.value, group: v.group })));
+      let attempts = 0;
+      const interval = setInterval(() => {
+        if (store.variables.length > 0) {
+          clearInterval(interval);
+          fn &&
+            typeof fn === "function" &&
+            fn(store.variables.map(v => ({ name: v.name, text: v.text, value: v.value, group: v.group })));
+        } else {
+          attempts++;
+          if (attempts++ > 20) {
+            clearInterval(interval);
+            fn &&
+              typeof fn === "function" &&
+              fn(store.variables.map(v => ({ name: v.name, text: v.text, value: v.value, group: v.group })));
+          }
+        }
+      }, 500);
     });
 
     socket.on("getSchedules", (_data: object, fn: Function) => {

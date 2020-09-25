@@ -19,6 +19,7 @@
         "tslib",
         "typechecking",
         "urllib",
+        "uuidv",
         "yyyymmdd"
     ],
     "editor.tabSize": 2,

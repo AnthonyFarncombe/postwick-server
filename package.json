@@ -30,7 +30,8 @@
     "mongoose": "^5.9.27",
     "nodemailer": "^6.4.11",
     "socket.io": "^2.3.0",
-    "urllib": "^2.36.1"
+    "urllib": "^2.36.1",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -42,6 +43,7 @@
     "@types/mongoose": "^5.7.35",
     "@types/nodemailer": "^6.4.0",
     "@types/socket.io": "^2.1.10",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "eslint": "^6.8.0",

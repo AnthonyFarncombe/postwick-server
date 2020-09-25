@@ -6,9 +6,11 @@ import fs from "fs";
 import jwt from "jsonwebtoken";
 import moment from "moment";
 import handlebars from "handlebars";
+import { v4 as uuidv4 } from "uuid";
 import { isDate } from "lodash";
 
 import User from "../models/user";
+import RefreshToken from "../models/refreshToken";
 import { JwtPayload, getUserFromRequest } from "../auth";
 import { sendMail } from "../email";
 
@@ -17,27 +19,51 @@ const router = express.Router();
 router.get("/me", async (req, res) => {
   try {
     const userContext = await getUserFromRequest(req);
-    const user = await User.findById(userContext.userId);
-    if (!user) throw new Error();
-    res.json({ id: user.id });
+    if (userContext.userId) {
+      const user = await User.findById(userContext.userId);
+      if (!user) throw new Error();
+      res.json({ id: user.id, firstName: user.firstName, lastName: user.lastName, roles: user.roles });
+    } else {
+      res.json({ id: "", roles: [] });
+    }
   } catch (err) {
     res.sendStatus(401);
+  }
+});
+
+router.get("/users", async (req, res) => {
+  try {
+    await getUserFromRequest(req);
+    const users = await User.find();
+    res.json(users.map(u => ({ name: `${u.firstName} ${u.lastName}`, email: u.email })));
+  } catch (err) {
+    res.json([]);
   }
 });
 
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    if (!user) return res.sendStatus(401);
+    if (!user) {
+      res.sendStatus(401);
+      return;
+    }
 
     if (req.body.hmi && process.env.HMI_CLIENT_IP) {
       const regex = new RegExp(process.env.HMI_CLIENT_IP);
-      if (req.connection.remoteAddress !== "::1" && !regex.test(req.connection.remoteAddress || "")) {
-        return res.sendStatus(401);
+      if (
+        (req.connection.remoteAddress !== "::1" && !regex.test(req.connection.remoteAddress || "")) ||
+        req.body.password !== user.hmiPin
+      ) {
+        res.sendStatus(401);
+        return;
       }
     } else {
       const isEqual = await bcrypt.compare(req.body.password, user.passwordHash || "");
-      if (!isEqual) return res.sendStatus(401);
+      if (!isEqual) {
+        res.sendStatus(401);
+        return;
+      }
     }
 
     const payload: JwtPayload = {
@@ -47,17 +73,48 @@ router.post("/login", async (req, res) => {
     };
 
     const privateKey = fs.readFileSync(path.resolve(__dirname, "../../private.key"), "utf8");
-    if (!privateKey) return res.sendStatus(401);
+    if (!privateKey) {
+      res.sendStatus(401);
+      return;
+    }
 
-    const token = jwt.sign(payload, privateKey, {
+    const jwtToken = jwt.sign(payload, privateKey, {
       expiresIn: "12h",
       algorithm: "RS256",
     });
 
-    return res.json({ userId: user.id, token, tokenExpiration: 12 });
+    const refreshToken = new RefreshToken({
+      userId: user.id,
+      token: uuidv4(),
+      createdDate: new Date(),
+    });
+
+    await refreshToken.save();
+
+    res.json({ userId: user.id, jwtToken, refreshToken: refreshToken.token, tokenExpiration: 12 });
   } catch (err) {
-    return res.sendStatus(401);
+    res.sendStatus(401);
   }
+});
+
+router.post("/refresh", (req, res) => {
+  console.log(req.body);
+
+  const publicKey = fs.readFileSync(path.resolve(__dirname, "../../public.key"), "utf8");
+  if (!publicKey) {
+    res.sendStatus(500);
+    return;
+  }
+
+  jwt.verify(req.body.jwtToken, publicKey, { ignoreExpiration: true }, (err, decoded) => {
+    if (err) {
+      console.error(err);
+      res.sendStatus(401);
+    } else {
+      console.log(decoded);
+      res.sendStatus(401);
+    }
+  });
 });
 
 router.post("/forgot-password", async (req, res) => {
