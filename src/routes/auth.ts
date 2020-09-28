@@ -98,20 +98,50 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/refresh", (req, res) => {
-  console.log(req.body);
-
   const publicKey = fs.readFileSync(path.resolve(__dirname, "../../public.key"), "utf8");
   if (!publicKey) {
     res.sendStatus(500);
     return;
   }
 
-  jwt.verify(req.body.jwtToken, publicKey, { ignoreExpiration: true }, (err, decoded) => {
-    if (err) {
-      console.error(err);
-      res.sendStatus(401);
-    } else {
-      console.log(decoded);
+  jwt.verify(req.body.jwtToken, publicKey, { ignoreExpiration: true }, async (err, decoded) => {
+    try {
+      if (err || !decoded) {
+        console.error(err);
+        res.sendStatus(401);
+        return;
+      }
+
+      const existingRefreshToken = await RefreshToken.findOneAndDelete({ token: req.body.refreshToken });
+      if (!existingRefreshToken) {
+        res.sendStatus(401);
+        return;
+      }
+
+      const privateKey = fs.readFileSync(path.resolve(__dirname, "../../private.key"), "utf8");
+      if (!privateKey) {
+        res.sendStatus(401);
+        return;
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { iat, exp, ...payload } = decoded as JwtPayload;
+
+      const jwtToken = jwt.sign(payload, privateKey, {
+        expiresIn: "12h",
+        algorithm: "RS256",
+      });
+
+      const refreshToken = new RefreshToken({
+        userId: existingRefreshToken.userId,
+        token: uuidv4(),
+        createdDate: new Date(),
+      });
+
+      await refreshToken.save();
+
+      res.json({ userId: refreshToken.userId, jwtToken, refreshToken: refreshToken.token, tokenExpiration: 12 });
+    } catch (err) {
       res.sendStatus(401);
     }
   });

@@ -24,6 +24,8 @@ const transformUser = (user: UserType): UserJson => ({
 
 router.get("/roles", (_req, res) => res.json(["users"]));
 
+router.get("/notifications", (_req, res) => res.json(["alarm", "anpr", "water"]));
+
 router.get("/", (_req, res) =>
   User.find()
     .then(users => res.json(users.map(u => transformUser(u))))
@@ -53,6 +55,27 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", (req, res) => res.json({ id: req.params.id, body: req.body }));
+router.put("/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      res.sendStatus(404);
+      return;
+    }
+
+    user.firstName = req.body.firstName;
+    user.lastName = req.body.lastName;
+    user.email = req.body.email;
+    user.hmiPin = req.body.hmiPin;
+    user.roles = req.body.roles;
+    user.notifications = req.body.notifications;
+
+    await user.save();
+
+    res.json(transformUser(user));
+  } catch (err) {
+    res.sendStatus(400);
+  }
+});
 
 export default router;

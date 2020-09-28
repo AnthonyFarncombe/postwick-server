@@ -51,7 +51,7 @@ export async function getUserFromRequest(req: Request): Promise<UserContext> {
     const isLocal =
       req.connection.remoteAddress === "::1" ||
       new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(req.connection.remoteAddress || "");
-    if (isLocal) {
+    if (isLocal && !(err instanceof jwt.TokenExpiredError)) {
       const userContext: UserContext = {
         userId: "",
         roles: [],
