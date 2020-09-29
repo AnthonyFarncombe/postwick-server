@@ -147,7 +147,7 @@ router.post("/refresh", (req, res) => {
   });
 });
 
-router.post("/forgot-password", async (req, res) => {
+router.post("/forgot", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) return res.sendStatus(400);
@@ -181,7 +181,7 @@ router.post("/forgot-password", async (req, res) => {
   }
 });
 
-router.post("/reset-password", async (req, res) => {
+router.post("/reset", async (req, res) => {
   try {
     const user = await User.findOne({ resetToken: req.body.token });
     if (!user) {
