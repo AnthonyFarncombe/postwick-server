@@ -160,7 +160,7 @@ router.post("/forgot", async (req, res) => {
 
     await User.findByIdAndUpdate({ _id: user._id }, { $set: { resetToken: token, resetExpires: expires } });
 
-    sendMail({
+    await sendMail({
       to: user.email,
       template: "forgot-password",
       subject: "Reset Password",
@@ -168,7 +168,7 @@ router.post("/forgot", async (req, res) => {
         url: handlebars.compile(req.body.url)({ token }),
         name: user.firstName,
       },
-    }).catch(err => console.error(err));
+    });
 
     if (token) {
       return res.sendStatus(200);
@@ -185,22 +185,22 @@ router.post("/reset", async (req, res) => {
   try {
     const user = await User.findOne({ resetToken: req.body.token });
     if (!user) {
-      return res.sendStatus(400).send("Cannot find user!");
+      return res.status(400).send("Cannot find user!");
     }
 
     if (user.email !== req.body.email) {
-      return res.sendStatus(400).send("Email address does not match!");
+      return res.status(400).send("Email address does not match!");
     }
 
     let expires = moment("1900-01-01");
     if (isDate(user.resetExpires)) expires = moment(user.resetExpires);
     if (moment.duration(expires.diff(moment())).minutes() < 0) {
-      return res.sendStatus(400).send("Token has expired");
+      return res.status(400).send("Token has expired");
     }
 
     const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
     if (!strongRegex.test(req.body.password || "")) {
-      return res.sendStatus(400).send("Password does not meet complexity requirements!");
+      return res.status(400).send("Password does not meet complexity requirements!");
     }
 
     const passwordHash = await bcrypt.hash(req.body.password, 10);
