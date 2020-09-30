@@ -32,6 +32,7 @@ const app = express();
 
 const httpServer = http.createServer(app);
 
+app.set("trust proxy", "loopback");
 app.use(cors());
 app.use(bodyParser.json());
 
