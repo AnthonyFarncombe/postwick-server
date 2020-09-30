@@ -41,7 +41,13 @@ app.use("/api", routes);
 
 socketModule(httpServer);
 
-const port = process.env.PORT && typeof process.env.PORT === "number" ? parseInt(process.env.PORT) : 3011;
+let port: number;
+try {
+  port = parseInt(process.env.PORT || "undefined");
+} catch (err) {
+  port = 3000;
+}
+
 httpServer.listen(port, () =>
   console.log(chalk.green(`Server running on http://localhost:${port}${server.graphqlPath}`)),
 );
