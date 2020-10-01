@@ -9,7 +9,10 @@ import variables from "./variables";
 
 const router = express.Router();
 
-router.get("/", (req, res) => res.json({ ip: req.connection.remoteAddress }));
+router.get("/", (req, res) => {
+  const ip = (req.headers["x-real-ip"] as string) || req.connection.remoteAddress || "";
+  res.send(ip);
+});
 
 router.use("/auth", auth);
 router.use("/cctv", cctv);

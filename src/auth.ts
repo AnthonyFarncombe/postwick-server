@@ -36,9 +36,6 @@ export async function getUserFromRequest(req: Request): Promise<UserContext> {
         if (!payload || !payload.exp || Date.now() >= payload.exp * 1000)
           return reject(new Error("JWT token has expired!"));
 
-        // if (req.connection.remoteAddress !== "::1" && payload.ip !== req.connection.remoteAddress)
-        //   return reject("IP address does not match!");
-
         resolve({
           userId: payload.userId,
           roles: payload.roles,
@@ -48,9 +45,12 @@ export async function getUserFromRequest(req: Request): Promise<UserContext> {
 
     return userContext;
   } catch (err) {
+    const clientIpAddress = (req.headers["x-real-ip"] as string) || req.connection.remoteAddress || "";
+
     const isLocal =
-      ["::1", "127.0.0.1", "::ffff:127.0.0.1"].includes(req.connection.remoteAddress || "") ||
-      new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(req.connection.remoteAddress || "");
+      ["::1", "127.0.0.1", "::ffff:127.0.0.1"].includes(clientIpAddress) ||
+      new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(clientIpAddress);
+
     if (isLocal && !(err instanceof jwt.TokenExpiredError)) {
       const userContext: UserContext = {
         userId: "",

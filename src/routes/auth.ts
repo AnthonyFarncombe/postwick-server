@@ -49,12 +49,14 @@ router.post("/login", async (req, res) => {
       return;
     }
 
-    if (req.body.hmi && process.env.HMI_CLIENT_IP) {
-      const regex = new RegExp(process.env.HMI_CLIENT_IP);
-      if (
-        (req.connection.remoteAddress !== "::1" && !regex.test(req.connection.remoteAddress || "")) ||
-        req.body.password !== user.hmiPin
-      ) {
+    const clientIpAddress = (req.headers["x-real-ip"] as string) || req.connection.remoteAddress || "";
+
+    const isLocal =
+      ["::1", "127.0.0.1", "::ffff:127.0.0.1"].includes(clientIpAddress) ||
+      new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(clientIpAddress);
+
+    if (isLocal && req.body.hmi) {
+      if (req.body.password !== user.hmiPin) {
         res.sendStatus(401);
         return;
       }
@@ -69,7 +71,7 @@ router.post("/login", async (req, res) => {
     const payload: JwtPayload = {
       userId: user.id,
       roles: user.roles || [],
-      ip: req.connection.remoteAddress || "",
+      ip: clientIpAddress,
     };
 
     const privateKey = fs.readFileSync(path.resolve(__dirname, "../../private.key"), "utf8");

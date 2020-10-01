@@ -24,7 +24,8 @@ const server = new ApolloServer({
     try {
       user = await getUserFromRequest(req);
     } catch (err) {}
-    return { ip: req.connection.remoteAddress, user };
+    const clientIpAddress = (req.headers["x-real-ip"] as string) || req.connection.remoteAddress || "";
+    return { ip: clientIpAddress, user };
   },
 });
 
@@ -32,7 +33,6 @@ const app = express();
 
 const httpServer = http.createServer(app);
 
-app.set("trust proxy", "loopback");
 app.use(cors());
 app.use(bodyParser.json());
 
