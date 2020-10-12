@@ -4,8 +4,6 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import moment from "moment";
 import handlebars from "handlebars";
-import fs from "fs";
-import path from "path";
 import { isDate } from "lodash";
 import User from "../models/user";
 import { JwtPayload } from "../auth";
@@ -16,7 +14,6 @@ const authResolvers: IResolvers<unknown, JwtPayload> = {
     async login(
       _parent,
       { email, password }: { email: string; password: string },
-      context,
     ): Promise<{ userId: string; token: string; tokenExpiration: number }> {
       try {
         const user = await User.findOne({ email });
@@ -28,16 +25,9 @@ const authResolvers: IResolvers<unknown, JwtPayload> = {
         const payload: JwtPayload = {
           userId: user.id,
           roles: user.roles || [],
-          ip: context.ip,
         };
 
-        const privateKey = fs.readFileSync(path.resolve(__dirname, "../../private.key"), "utf8");
-        if (!privateKey) throw new Error("Private key not found!");
-
-        const token = jwt.sign(payload, privateKey, {
-          expiresIn: "12h",
-          algorithm: "RS256",
-        });
+        const token = jwt.sign(payload, process.env.JWT_SECRET || "", { expiresIn: "12h" });
 
         return { userId: user.id, token, tokenExpiration: 12 };
       } catch (err) {

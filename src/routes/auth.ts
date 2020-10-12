@@ -22,7 +22,13 @@ router.get("/me", async (req, res) => {
     if (userContext.userId) {
       const user = await User.findById(userContext.userId);
       if (!user) throw new Error();
-      res.json({ id: user.id, firstName: user.firstName, lastName: user.lastName, roles: user.roles });
+      res.json({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        roles: user.roles,
+        isLocal: userContext.isLocal,
+      });
     } else {
       res.json({ id: "", roles: [] });
     }
@@ -34,7 +40,7 @@ router.get("/me", async (req, res) => {
 router.get("/users", async (req, res) => {
   try {
     await getUserFromRequest(req);
-    const users = await User.find();
+    const users = await User.find({ hmiPin: { $exists: true } });
     res.json(users.map(u => ({ name: `${u.firstName} ${u.lastName}`, email: u.email })));
   } catch (err) {
     res.json([]);
@@ -71,19 +77,9 @@ router.post("/login", async (req, res) => {
     const payload: JwtPayload = {
       userId: user.id,
       roles: user.roles || [],
-      ip: clientIpAddress,
     };
 
-    const privateKey = fs.readFileSync(path.resolve(__dirname, "../../private.key"), "utf8");
-    if (!privateKey) {
-      res.sendStatus(401);
-      return;
-    }
-
-    const jwtToken = jwt.sign(payload, privateKey, {
-      expiresIn: "12h",
-      algorithm: "RS256",
-    });
+    const jwtToken = jwt.sign(payload, process.env.JWT_SECRET || "", { expiresIn: "12h" });
 
     const refreshToken = new RefreshToken({
       userId: user.id,
@@ -100,13 +96,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/refresh", (req, res) => {
-  const publicKey = fs.readFileSync(path.resolve(__dirname, "../../public.key"), "utf8");
-  if (!publicKey) {
-    res.sendStatus(500);
-    return;
-  }
-
-  jwt.verify(req.body.jwtToken, publicKey, { ignoreExpiration: true }, async (err, decoded) => {
+  jwt.verify(req.body.jwtToken, process.env.JWT_SECRET || "", { ignoreExpiration: true }, async (err, decoded) => {
     try {
       if (err || !decoded) {
         console.error(err);
@@ -129,10 +119,7 @@ router.post("/refresh", (req, res) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { iat, exp, ...payload } = decoded as JwtPayload;
 
-      const jwtToken = jwt.sign(payload, privateKey, {
-        expiresIn: "12h",
-        algorithm: "RS256",
-      });
+      const jwtToken = jwt.sign(payload, process.env.JWT_SECRET || "", { expiresIn: "12h" });
 
       const refreshToken = new RefreshToken({
         userId: existingRefreshToken.userId,

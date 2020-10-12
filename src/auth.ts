@@ -1,22 +1,29 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import fs from "fs";
-import path from "path";
 import { Request, Response, NextFunction } from "express";
 import User from "./models/user";
 
-export interface UserContext {
+export interface UserData {
   userId: string;
   roles: string[];
 }
 
-export interface JwtPayload extends UserContext {
+export interface JwtPayload extends UserData {
   iat?: number;
   exp?: number;
-  ip: string;
+}
+
+export interface UserContext extends UserData {
+  isLocal: boolean;
 }
 
 export async function getUserFromRequest(req: Request): Promise<UserContext> {
+  const clientIpAddress = (req.headers["x-real-ip"] as string) || req.connection.remoteAddress || "";
+
+  const isLocal =
+    ["::1", "127.0.0.1", "::ffff:127.0.0.1"].includes(clientIpAddress) ||
+    new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(clientIpAddress);
+
   try {
     const bearerHeader = req.headers.authorization || "";
 
@@ -24,11 +31,8 @@ export async function getUserFromRequest(req: Request): Promise<UserContext> {
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
 
-    const publicKey = fs.readFileSync(path.resolve(__dirname, "../public.key"), "utf8");
-    if (!publicKey) throw new Error("Public key not found!");
-
     const userContext: UserContext = await new Promise((resolve, reject) => {
-      jwt.verify(bearerToken, publicKey, (err, decoded) => {
+      jwt.verify(bearerToken, process.env.JWT_SECRET || "", (err, decoded) => {
         if (err) return reject(err);
 
         const payload = decoded as JwtPayload;
@@ -39,22 +43,18 @@ export async function getUserFromRequest(req: Request): Promise<UserContext> {
         resolve({
           userId: payload.userId,
           roles: payload.roles,
+          isLocal,
         });
       });
     });
 
     return userContext;
   } catch (err) {
-    const clientIpAddress = (req.headers["x-real-ip"] as string) || req.connection.remoteAddress || "";
-
-    const isLocal =
-      ["::1", "127.0.0.1", "::ffff:127.0.0.1"].includes(clientIpAddress) ||
-      new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(clientIpAddress);
-
     if (isLocal && !(err instanceof jwt.TokenExpiredError)) {
       const userContext: UserContext = {
         userId: "",
         roles: [],
+        isLocal,
       };
       return userContext;
     } else {
@@ -80,11 +80,9 @@ export function authMiddleware(role?: string): (req: Request, res: Response, nex
 export async function login({
   email,
   password,
-  ip,
 }: {
   email: string;
   password: string;
-  ip: string;
 }): Promise<{ userId: string; token: string; tokenExpiration: number }> {
   try {
     const user = await User.findOne({ email });
@@ -96,16 +94,9 @@ export async function login({
     const payload: JwtPayload = {
       userId: user.id,
       roles: user.roles || [],
-      ip: ip,
     };
 
-    const privateKey = fs.readFileSync(path.resolve(__dirname, "../private.key"), "utf8");
-    if (!privateKey) throw "Private key not found!";
-
-    const token = jwt.sign(payload, privateKey, {
-      expiresIn: "12h",
-      algorithm: "RS256",
-    });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || "", { expiresIn: "12h" });
 
     return { userId: user.id, token, tokenExpiration: 12 };
   } catch (err) {

@@ -57,22 +57,25 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          roles: req.body.roles,
+          notifications: req.body.notifications,
+        },
+      },
+      { new: true },
+    );
+
+    if (user) {
+      res.json(transformUser(user));
+    } else {
       res.sendStatus(404);
-      return;
     }
-
-    user.firstName = req.body.firstName;
-    user.lastName = req.body.lastName;
-    user.email = req.body.email;
-    user.hmiPin = req.body.hmiPin;
-    user.roles = req.body.roles;
-    user.notifications = req.body.notifications;
-
-    await user.save();
-
-    res.json(transformUser(user));
   } catch (err) {
     res.sendStatus(400);
   }

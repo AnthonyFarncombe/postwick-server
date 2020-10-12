@@ -527,13 +527,24 @@
     }
   },
   {
+    "name": "toggleNorthFoyerLocked",
+    "value": false,
+    "toggle": 1000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 5,
+      "bit": 3
+    }
+  },
+  {
     "name": "gateClosed",
     "value": false,
     "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 52,
+      "byte": 60,
       "bit": 0
     }
   },
@@ -544,7 +555,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 52,
+      "byte": 60,
       "bit": 1
     }
   },
@@ -555,7 +566,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 52,
+      "byte": 60,
       "bit": 2
     }
   },
@@ -566,7 +577,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 52,
+      "byte": 60,
       "bit": 3
     }
   },
@@ -577,7 +588,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 52,
+      "byte": 60,
       "bit": 4
     }
   },
@@ -588,8 +599,19 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 53,
+      "byte": 61,
       "bit": 0
+    }
+  },
+  {
+    "name": "northFoyerLocked",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 61,
+      "bit": 1
     }
   },
   {
@@ -599,7 +621,7 @@
     "plc": {
       "type": "bool",
       "action": "read",
-      "byte": 54,
+      "byte": 62,
       "bit": 0
     }
   },
@@ -621,6 +643,116 @@
       "type": "int16",
       "action": "write",
       "byte": 8
+    }
+  },
+  {
+    "name": "mainDoor1Status",
+    "text": "Main Door 1",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 38
+    }
+  },
+  {
+    "name": "mainDoor2Status",
+    "text": "Main Door 2",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 40
+    }
+  },
+  {
+    "name": "mainDoor3Status",
+    "text": "Main Door 3",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 42
+    }
+  },
+  {
+    "name": "mainDoor4Status",
+    "text": "Main Door 4",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 44
+    }
+  },
+  {
+    "name": "mainDoor5Status",
+    "text": "Main Door 5",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 46
+    }
+  },
+  {
+    "name": "mainDoor6Status",
+    "text": "Main Door 6",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 48
+    }
+  },
+  {
+    "name": "northSlidingDoorStatus",
+    "text": "North Sliding Door",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 50
+    }
+  },
+  {
+    "name": "southExitDoor1Status",
+    "text": "South Exit Door 1",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 52
+    }
+  },
+  {
+    "name": "southExitDoor2Status",
+    "text": "South Exit Door 2",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 54
+    }
+  },
+  {
+    "name": "sideEntranceDoorStatus",
+    "text": "Side Entrance Door",
+    "value": 0,
+    "group": "doors",
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 56
     }
   }
 ]
