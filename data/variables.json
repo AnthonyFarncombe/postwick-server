@@ -822,7 +822,7 @@
     }
   },
   {
-    "name": "disableSideEntranceDoor1",
+    "name": "disableSideEntranceDoor",
     "value": false,
     "toggle": 500,
     "plc": {
