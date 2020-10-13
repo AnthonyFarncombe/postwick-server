@@ -800,7 +800,7 @@
     }
   },
   {
-    "name": "disableSouthExit1",
+    "name": "disableSouthExitDoor1",
     "value": false,
     "toggle": 500,
     "plc": {
@@ -811,7 +811,7 @@
     }
   },
   {
-    "name": "disableSouthExit2",
+    "name": "disableSouthExitDoor2",
     "value": false,
     "toggle": 500,
     "plc": {
@@ -822,7 +822,7 @@
     }
   },
   {
-    "name": "disableSideEntrance1",
+    "name": "disableSideEntranceDoor1",
     "value": false,
     "toggle": 500,
     "plc": {
