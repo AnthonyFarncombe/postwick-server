@@ -112,7 +112,7 @@
   {
     "name": "mainHallLightsToggle",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -134,7 +134,7 @@
   {
     "name": "mainFoyerLightsToggle",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -156,7 +156,7 @@
   {
     "name": "southFoyerLightsToggle",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -178,7 +178,7 @@
   {
     "name": "northFoyerLightsToggle",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -200,7 +200,7 @@
   {
     "name": "toiletLightsToggle",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -222,7 +222,7 @@
   {
     "name": "rearCorridorLightsToggle",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -244,7 +244,7 @@
   {
     "name": "plantRoomLightsToggle",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -266,7 +266,7 @@
   {
     "name": "buildingLightsToggle",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -288,7 +288,7 @@
   {
     "name": "carParkLightsToggle",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -496,7 +496,7 @@
   {
     "name": "openGate",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -507,7 +507,7 @@
   {
     "name": "toggleGateHold",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -518,7 +518,7 @@
   {
     "name": "toggleDoorSystem",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -529,7 +529,7 @@
   {
     "name": "toggleNorthFoyerLocked",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -628,7 +628,7 @@
   {
     "name": "toggleHvacRunning",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -753,6 +753,83 @@
       "type": "int16",
       "action": "read",
       "byte": 56
+    }
+  },
+  {
+    "name": "disableMainDoor1",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 8,
+      "bit": 0
+    }
+  },
+  {
+    "name": "disableMainDoor2",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 8,
+      "bit": 1
+    }
+  },
+  {
+    "name": "disableMainDoor5",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 8,
+      "bit": 2
+    }
+  },
+  {
+    "name": "disableMainDoor6",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 8,
+      "bit": 3
+    }
+  },
+  {
+    "name": "disableSouthExit1",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 8,
+      "bit": 4
+    }
+  },
+  {
+    "name": "disableSouthExit2",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 8,
+      "bit": 5
+    }
+  },
+  {
+    "name": "disableSideEntrance1",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 8,
+      "bit": 6
     }
   }
 ]
