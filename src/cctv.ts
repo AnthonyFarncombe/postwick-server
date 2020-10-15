@@ -2,7 +2,7 @@ import urllib from "urllib";
 import Jimp from "jimp";
 import path from "path";
 import fs from "fs";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export interface ImageWithNames {
   image: Buffer;
@@ -33,8 +33,8 @@ export async function getCCTVImage(): Promise<ImageWithNames> {
   );
 
   // Save images to archive
-  const imageNameOrig = `gate_${moment().format("YYYYMMDD_HHmmss")}.jpg`;
-  const imageNameCropped = `gate_cropped_${moment().format("YYYYMMDD_HHmmss")}.jpg`;
+  const imageNameOrig = `gate_${dayjs().format("YYYYMMDD_HHmmss")}.jpg`;
+  const imageNameCropped = `gate_cropped_${dayjs().format("YYYYMMDD_HHmmss")}.jpg`;
   try {
     if (process.env.CCTV_ARCHIVE) {
       const imagePathOrig = path.resolve(process.env.CCTV_ARCHIVE, imageNameOrig);
@@ -60,7 +60,7 @@ export async function getGateFaceImage(): Promise<GateFaceImageWithName> {
   const { res, data } = await urllib.request(url, { digestAuth: `${username}:${password}`, timeout: [15000, 15000] });
   if (res.statusCode !== 200) throw new Error("Unable to download image!");
 
-  const imageName = `gate_face_${moment().format("YYYYMMDD_HHmmss")}.jpg`;
+  const imageName = `gate_face_${dayjs().format("YYYYMMDD_HHmmss")}.jpg`;
 
   return { image: data, imageName };
 }

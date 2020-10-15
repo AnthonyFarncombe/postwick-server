@@ -2,7 +2,7 @@ import { IResolvers, ApolloError, AuthenticationError, ValidationError } from "a
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import moment from "moment";
+import dayjs from "dayjs";
 import handlebars from "handlebars";
 import { isDate } from "lodash";
 import User from "../models/user";
@@ -44,7 +44,7 @@ const authResolvers: IResolvers<unknown, JwtPayload> = {
 
         const buffer = crypto.randomBytes(20);
         const token = buffer.toString("hex");
-        const expires = moment()
+        const expires = dayjs()
           .add(30, "minute")
           .toDate();
 
@@ -80,9 +80,9 @@ const authResolvers: IResolvers<unknown, JwtPayload> = {
           throw new ValidationError("Email address does not match!");
         }
 
-        let expires = moment("1900-01-01");
-        if (isDate(user.resetExpires)) expires = moment(user.resetExpires);
-        if (moment.duration(expires.diff(moment())).minutes() < 0) {
+        let expires = dayjs("1900-01-01");
+        if (isDate(user.resetExpires)) expires = dayjs(user.resetExpires);
+        if (expires.diff(dayjs(), "minute") < 0) {
           throw new ValidationError("Token has expired");
         }
 

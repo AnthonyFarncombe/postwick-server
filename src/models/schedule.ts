@@ -4,7 +4,7 @@ export interface ScheduleType extends Document {
   dayOfWeek: string;
   timeOfMeeting: string;
   frequency: string;
-  startDate?: Date;
+  startDate?: string;
   overrideDay: boolean;
 }
 
@@ -12,7 +12,7 @@ const scheduleSchema: Schema = new Schema({
   dayOfWeek: { type: String, required: true },
   timeOfMeeting: { type: String, required: true },
   frequency: { type: String, required: true },
-  startDate: { type: Date },
+  startDate: { type: String },
   overrideDay: { type: Boolean },
 });
 

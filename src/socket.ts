@@ -13,7 +13,7 @@ interface ScheduleSocketType {
   dayOfWeek: string;
   timeOfMeeting: string;
   frequency: string;
-  startDate?: Date;
+  startDate?: string;
   overrideDay: boolean;
 }
 

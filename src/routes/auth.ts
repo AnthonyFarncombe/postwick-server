@@ -4,7 +4,7 @@ import crypto from "crypto";
 import path from "path";
 import fs from "fs";
 import jwt from "jsonwebtoken";
-import moment from "moment";
+import dayjs from "dayjs";
 import handlebars from "handlebars";
 import { v4 as uuidv4 } from "uuid";
 import { isDate } from "lodash";
@@ -143,7 +143,7 @@ router.post("/forgot", async (req, res) => {
 
     const buffer = crypto.randomBytes(20);
     const token = buffer.toString("hex");
-    const expires = moment()
+    const expires = dayjs()
       .add(30, "minute")
       .toDate();
 
@@ -181,9 +181,9 @@ router.post("/reset", async (req, res) => {
       return res.status(400).send("Email address does not match!");
     }
 
-    let expires = moment("1900-01-01");
-    if (isDate(user.resetExpires)) expires = moment(user.resetExpires);
-    if (moment.duration(expires.diff(moment())).minutes() < 0) {
+    let expires = dayjs("1900-01-01");
+    if (isDate(user.resetExpires)) expires = dayjs(user.resetExpires);
+    if (expires.diff(dayjs(), "minute") < 0) {
       return res.status(400).send("Token has expired");
     }
 
