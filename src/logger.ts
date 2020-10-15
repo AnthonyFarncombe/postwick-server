@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export default (
   moduleName: string,
@@ -12,28 +12,28 @@ export default (
   return {
     logInfo(msg: string): void {
       console.log(
-        chalk.blue(`[${moment().format("DD/MM/YYYY HH:mm:ss:SSS")}] `) +
+        chalk.blue(`[${dayjs().format("DD/MM/YYYY HH:mm:ss:SSS")}] `) +
           chalk.black.bgBlue(` ${moduleName.padStart(7, " ")} `) +
           chalk.blue(` ${msg}`),
       );
     },
     logSuccess(msg: string): void {
       console.log(
-        chalk.green(`[${moment().format("DD/MM/YYYY HH:mm:ss:SSS")}] `) +
+        chalk.green(`[${dayjs().format("DD/MM/YYYY HH:mm:ss:SSS")}] `) +
           chalk.black.bgGreen(` ${moduleName.padStart(7, " ")} `) +
           chalk.green(` ${msg}`),
       );
     },
     logWarning(msg: string): void {
       console.log(
-        chalk.yellow(`[${moment().format("DD/MM/YYYY HH:mm:ss:SSS")}] `) +
+        chalk.yellow(`[${dayjs().format("DD/MM/YYYY HH:mm:ss:SSS")}] `) +
           chalk.black.bgYellow(` ${moduleName.padStart(7, " ")} `) +
           chalk.yellow(` ${msg}`),
       );
     },
     logError(msg: string): void {
       console.error(
-        chalk.red(`[${moment().format("DD/MM/YYYY HH:mm:ss:SSS")}] `) +
+        chalk.red(`[${dayjs().format("DD/MM/YYYY HH:mm:ss:SSS")}] `) +
           chalk.black.bgRed(` ${moduleName.padStart(7, " ")} `) +
           chalk.red(` ${msg}`),
       );
