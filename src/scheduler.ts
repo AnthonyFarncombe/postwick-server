@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import chalk from "chalk";
-import store from "./store";
+import store, { Variable } from "./store";
 import Schedule from "./models/schedule";
 
-const meetingScheduled = store.variables.find(v => v.name === "meetingScheduled");
+let meetingScheduled: Variable | undefined;
 
 export async function isMeetingScheduled(): Promise<boolean> {
   try {
@@ -68,6 +68,20 @@ export async function isMeetingScheduled(): Promise<boolean> {
   }
 }
 
-setInterval(async () => {
-  if (meetingScheduled) meetingScheduled.value = await isMeetingScheduled();
-}, 1000 * 60);
+export async function startScheduler(): Promise<void> {
+  console.log(chalk.green("Starting scheduler"));
+
+  meetingScheduled = store.variables.find(v => v.name === "meetingScheduled");
+
+  if (meetingScheduled) {
+    meetingScheduled.value = await isMeetingScheduled();
+
+    setInterval(async () => {
+      if (meetingScheduled) {
+        meetingScheduled.value = await isMeetingScheduled();
+      }
+    }, 1000 * 60);
+  } else {
+    console.log(chalk.red("Schedule variable not found"));
+  }
+}

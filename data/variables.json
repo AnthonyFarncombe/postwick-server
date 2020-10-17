@@ -391,8 +391,8 @@
     "plc": {
       "type": "bool",
       "action": "write",
-      "byte": 4,
-      "bit": 7
+      "byte": 7,
+      "bit": 1
     }
   },
   {
