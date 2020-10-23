@@ -110,17 +110,6 @@
     }
   },
   {
-    "name": "mainHallLightsToggle",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 4,
-      "bit": 0
-    }
-  },
-  {
     "name": "mainHallLightsStatus",
     "text": "Main Hall Lights",
     "group": "insideLights",
@@ -129,17 +118,6 @@
       "type": "int8",
       "action": "read",
       "byte": 24
-    }
-  },
-  {
-    "name": "mainFoyerLightsToggle",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 4,
-      "bit": 1
     }
   },
   {
@@ -154,17 +132,6 @@
     }
   },
   {
-    "name": "southFoyerLightsToggle",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 4,
-      "bit": 2
-    }
-  },
-  {
     "name": "southFoyerLightsStatus",
     "text": "South Foyer Lights",
     "group": "insideLights",
@@ -173,17 +140,6 @@
       "type": "int8",
       "action": "read",
       "byte": 26
-    }
-  },
-  {
-    "name": "northFoyerLightsToggle",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 4,
-      "bit": 3
     }
   },
   {
@@ -198,17 +154,6 @@
     }
   },
   {
-    "name": "toiletLightsToggle",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 4,
-      "bit": 4
-    }
-  },
-  {
     "name": "toiletLightsStatus",
     "text": "Toilet Lights",
     "group": "insideLights",
@@ -217,17 +162,6 @@
       "type": "int8",
       "action": "read",
       "byte": 28
-    }
-  },
-  {
-    "name": "rearCorridorLightsToggle",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 4,
-      "bit": 5
     }
   },
   {
@@ -242,17 +176,6 @@
     }
   },
   {
-    "name": "plantRoomLightsToggle",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 4,
-      "bit": 6
-    }
-  },
-  {
     "name": "plantRoomLightsStatus",
     "text": "Plant Room Lights",
     "group": "insideLights",
@@ -264,17 +187,6 @@
     }
   },
   {
-    "name": "buildingLightsToggle",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 10,
-      "bit": 0
-    }
-  },
-  {
     "name": "buildingLightsStatus",
     "text": "Building Lights",
     "group": "outsideLights",
@@ -283,17 +195,6 @@
       "type": "int8",
       "action": "read",
       "byte": 31
-    }
-  },
-  {
-    "name": "carParkLightsToggle",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 10,
-      "bit": 1
     }
   },
   {
@@ -334,19 +235,6 @@
     }
   },
   {
-    "name": "anprResponse",
-    "text": "ANPR Response",
-    "group": "anpr",
-    "value": false,
-    "log": true,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 4,
-      "bit": 7
-    }
-  },
-  {
     "name": "securityAlarmEnabled",
     "text": "Security Alarm Enabled",
     "group": "alarm",
@@ -383,16 +271,6 @@
       "action": "read",
       "byte": 35,
       "bit": 4
-    }
-  },
-  {
-    "name": "meetingScheduled",
-    "value": false,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 7,
-      "bit": 1
     }
   },
   {
@@ -482,167 +360,6 @@
       "action": "read",
       "byte": 37,
       "bit": 0
-    }
-  },
-  {
-    "name": "waterSolenoidMode",
-    "value": 0,
-    "plc": {
-      "type": "int8",
-      "action": "write",
-      "byte": 6
-    }
-  },
-  {
-    "name": "openGate",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 5,
-      "bit": 0
-    }
-  },
-  {
-    "name": "toggleGateHold",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 5,
-      "bit": 1
-    }
-  },
-  {
-    "name": "toggleDoorSystem",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 5,
-      "bit": 2
-    }
-  },
-  {
-    "name": "toggleNorthFoyerLocked",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 5,
-      "bit": 3
-    }
-  },
-  {
-    "name": "gateClosed",
-    "value": false,
-    "log": true,
-    "plc": {
-      "type": "bool",
-      "action": "read",
-      "byte": 60,
-      "bit": 0
-    }
-  },
-  {
-    "name": "gateMoving",
-    "value": false,
-    "log": true,
-    "plc": {
-      "type": "bool",
-      "action": "read",
-      "byte": 60,
-      "bit": 1
-    }
-  },
-  {
-    "name": "gateHeldOpen",
-    "value": false,
-    "log": true,
-    "plc": {
-      "type": "bool",
-      "action": "read",
-      "byte": 60,
-      "bit": 2
-    }
-  },
-  {
-    "name": "siteEntryBeam",
-    "value": false,
-    "log": true,
-    "plc": {
-      "type": "bool",
-      "action": "read",
-      "byte": 60,
-      "bit": 3
-    }
-  },
-  {
-    "name": "gateEntryBeam",
-    "value": false,
-    "log": true,
-    "plc": {
-      "type": "bool",
-      "action": "read",
-      "byte": 60,
-      "bit": 4
-    }
-  },
-  {
-    "name": "doorSystemEnabled",
-    "value": false,
-    "log": true,
-    "plc": {
-      "type": "bool",
-      "action": "read",
-      "byte": 61,
-      "bit": 0
-    }
-  },
-  {
-    "name": "northFoyerLocked",
-    "value": false,
-    "log": true,
-    "plc": {
-      "type": "bool",
-      "action": "read",
-      "byte": 61,
-      "bit": 1
-    }
-  },
-  {
-    "name": "hvacRunning",
-    "value": false,
-    "log": true,
-    "plc": {
-      "type": "bool",
-      "action": "read",
-      "byte": 62,
-      "bit": 0
-    }
-  },
-  {
-    "name": "toggleHvacRunning",
-    "value": false,
-    "toggle": 500,
-    "plc": {
-      "type": "bool",
-      "action": "write",
-      "byte": 7,
-      "bit": 0
-    }
-  },
-  {
-    "name": "hvacSetPoint",
-    "value": 180,
-    "plc": {
-      "type": "int16",
-      "action": "write",
-      "byte": 8
     }
   },
   {
@@ -756,6 +473,558 @@
     }
   },
   {
+    "name": "gateClosed",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 60,
+      "bit": 0
+    }
+  },
+  {
+    "name": "gateMoving",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 60,
+      "bit": 1
+    }
+  },
+  {
+    "name": "gateHeldOpen",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 60,
+      "bit": 2
+    }
+  },
+  {
+    "name": "siteEntryBeam",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 60,
+      "bit": 3
+    }
+  },
+  {
+    "name": "gateEntryBeam",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 60,
+      "bit": 4
+    }
+  },
+  {
+    "name": "doorSystemEnabled",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 61,
+      "bit": 0
+    }
+  },
+  {
+    "name": "northFoyerLocked",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 61,
+      "bit": 1
+    }
+  },
+  {
+    "name": "hvacRunning",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 62,
+      "bit": 0
+    }
+  },
+  {
+    "name": "condenserHeatingEnable",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 62,
+      "bit": 1
+    }
+  },
+  {
+    "name": "ahuFilterDirty",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 62,
+      "bit": 2
+    }
+  },
+  {
+    "name": "condenser1Status",
+    "text": "Condenser 1",
+    "value": 0,
+    "log": true,
+    "group": "condensers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 63
+    }
+  },
+  {
+    "name": "condenser2Status",
+    "text": "Condenser 2",
+    "value": 0,
+    "log": true,
+    "group": "condensers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 64
+    }
+  },
+  {
+    "name": "condenser3Status",
+    "text": "Condenser 3",
+    "value": 0,
+    "log": true,
+    "group": "condensers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 65
+    }
+  },
+  {
+    "name": "condenser4Status",
+    "text": "Condenser 4",
+    "value": 0,
+    "log": true,
+    "group": "condensers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 66
+    }
+  },
+  {
+    "name": "condenser5Status",
+    "text": "Condenser 5",
+    "value": 0,
+    "log": true,
+    "group": "condensers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 67
+    }
+  },
+  {
+    "name": "condenser6Status",
+    "text": "Condenser 6",
+    "value": 0,
+    "log": true,
+    "group": "condensers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 68
+    }
+  },
+  {
+    "name": "condenser7Status",
+    "text": "Condenser 7",
+    "value": 0,
+    "log": true,
+    "group": "condensers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 69
+    }
+  },
+  {
+    "name": "condenser8Status",
+    "text": "Condenser 8",
+    "value": 0,
+    "log": true,
+    "group": "condensers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 70
+    }
+  },
+  {
+    "name": "supplyAir1Fault",
+    "text": "Supply Air 1",
+    "value": false,
+    "log": true,
+    "group": "fans",
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 71,
+      "bit": 0
+    }
+  },
+  {
+    "name": "supplyAir2Fault",
+    "text": "Supply Air 2",
+    "value": false,
+    "log": true,
+    "group": "fans",
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 71,
+      "bit": 1
+    }
+  },
+  {
+    "name": "supplyAir3Fault",
+    "text": "Supply Air 3",
+    "value": false,
+    "log": true,
+    "group": "fans",
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 71,
+      "bit": 2
+    }
+  },
+  {
+    "name": "supplyAir4Fault",
+    "text": "Supply Air 4",
+    "value": false,
+    "log": true,
+    "group": "fans",
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 71,
+      "bit": 3
+    }
+  },
+  {
+    "name": "returnAir1Fault",
+    "text": "Return Air 1",
+    "value": false,
+    "log": true,
+    "group": "fans",
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 71,
+      "bit": 4
+    }
+  },
+  {
+    "name": "returnAir2Fault",
+    "text": "Return Air 2",
+    "value": false,
+    "log": true,
+    "group": "fans",
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 71,
+      "bit": 5
+    }
+  },
+  {
+    "name": "returnAir3Fault",
+    "text": "Return Air 3",
+    "value": false,
+    "log": true,
+    "group": "fans",
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 71,
+      "bit": 6
+    }
+  },
+  {
+    "name": "returnAir4Fault",
+    "text": "Return Air 4",
+    "value": false,
+    "log": true,
+    "group": "fans",
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 71,
+      "bit": 7
+    }
+  },
+  {
+    "name": "supplyAirCommand",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 72
+    }
+  },
+  {
+    "name": "returnAirCommand",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 74
+    }
+  },
+  {
+    "name": "mainFoyerCassetteStatus",
+    "text": "Main Foyer Cassette",
+    "value": 0,
+    "group": "cassettes",
+    "log": true,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 76
+    }
+  },
+  {
+    "name": "SouthFoyerCassetteStatus",
+    "text": "South Foyer Cassette",
+    "value": 0,
+    "group": "cassettes",
+    "log": true,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 77
+    }
+  },
+  {
+    "name": "plantPlcStatus",
+    "text": "Plant Room PLC",
+    "value": 0,
+    "group": "plc",
+    "log": true,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 78
+    }
+  },
+  {
+    "name": "gatePlcStatus",
+    "text": "Gate PLC",
+    "value": 0,
+    "group": "plc",
+    "log": true,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 79
+    }
+  },
+  {
+    "name": "ahuPlcStatus",
+    "text": "AHU PLC",
+    "value": 0,
+    "group": "plc",
+    "log": true,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 80
+    }
+  },
+  {
+    "name": "mainHallLightsToggle",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 4,
+      "bit": 0
+    }
+  },
+  {
+    "name": "mainFoyerLightsToggle",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 4,
+      "bit": 1
+    }
+  },
+  {
+    "name": "southFoyerLightsToggle",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 4,
+      "bit": 2
+    }
+  },
+  {
+    "name": "northFoyerLightsToggle",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 4,
+      "bit": 3
+    }
+  },
+  {
+    "name": "toiletLightsToggle",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 4,
+      "bit": 4
+    }
+  },
+  {
+    "name": "rearCorridorLightsToggle",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 4,
+      "bit": 5
+    }
+  },
+  {
+    "name": "plantRoomLightsToggle",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 4,
+      "bit": 6
+    }
+  },
+  {
+    "name": "openGate",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 5,
+      "bit": 0
+    }
+  },
+  {
+    "name": "toggleGateHold",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 5,
+      "bit": 1
+    }
+  },
+  {
+    "name": "toggleDoorSystem",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 5,
+      "bit": 2
+    }
+  },
+  {
+    "name": "toggleNorthFoyerLocked",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 5,
+      "bit": 3
+    }
+  },
+  {
+    "name": "anprResponse",
+    "text": "ANPR Response",
+    "group": "anpr",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 5,
+      "bit": 4
+    }
+  },
+  {
+    "name": "waterSolenoidMode",
+    "value": 0,
+    "plc": {
+      "type": "int8",
+      "action": "write",
+      "byte": 6
+    }
+  },
+  {
+    "name": "toggleHvacRunning",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 7,
+      "bit": 0
+    }
+  },
+  {
+    "name": "meetingScheduled",
+    "value": false,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 7,
+      "bit": 1
+    }
+  },
+  {
     "name": "disableMainDoor1",
     "value": false,
     "toggle": 500,
@@ -830,6 +1099,37 @@
       "action": "write",
       "byte": 8,
       "bit": 6
+    }
+  },
+  {
+    "name": "buildingLightsToggle",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 9,
+      "bit": 0
+    }
+  },
+  {
+    "name": "carParkLightsToggle",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 9,
+      "bit": 1
+    }
+  },
+  {
+    "name": "hvacSetPoint",
+    "value": 180,
+    "plc": {
+      "type": "int16",
+      "action": "write",
+      "byte": 10
     }
   }
 ]
