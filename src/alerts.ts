@@ -5,6 +5,7 @@ import VariableLog from "./models/variableLog";
 import { VisitType } from "./models/visit";
 import User from "./models/user";
 import Mail from "nodemailer/lib/mailer";
+import { sendSMS } from "./aws";
 
 let varsToLog: string[] = [];
 let enableLogging = false;
@@ -35,12 +36,25 @@ async function alarmAlerts(variable: Variable): Promise<void> {
     const users = await User.find({ notifications: "alarm" });
     if (!users) return;
 
-    sendMail({
-      to: users.map(u => ({ name: `${u.firstName} ${u.lastName}`, address: u.email })),
-      template: "alarm",
-      subject: match[1][0].toUpperCase() + match[1].slice(1) + " Alarm Triggered - Postwick",
-      context: { type: match[1] },
-    });
+    const smsUsers = users.filter(u => u.mobile);
+    const emailUsers = users.filter(u => u.email);
+
+    smsUsers.forEach(
+      async u =>
+        await sendSMS({
+          phoneNumber: u.mobile,
+          message: match[1][0].toUpperCase() + match[1].slice(1) + " Alarm Triggered - Postwick",
+        }),
+    );
+
+    if (emailUsers) {
+      await sendMail({
+        to: emailUsers.map(u => ({ name: `${u.firstName} ${u.lastName}`, address: u.email })),
+        template: "alarm",
+        subject: match[1][0].toUpperCase() + match[1].slice(1) + " Alarm Triggered - Postwick",
+        context: { type: match[1] },
+      });
+    }
   } catch (err) {
     console.error(err);
   }
@@ -53,12 +67,25 @@ async function waterAlerts(variable: Variable): Promise<void> {
     const users = await User.find({ notifications: "water" });
     if (!users) return;
 
-    sendMail({
-      to: users.map(u => ({ name: `${u.firstName} ${u.lastName}`, address: u.email })),
-      template: "water",
-      subject: "Postwick - Moisture Sensor Triggered!",
-      context: { location: variable.text?.toLowerCase() },
-    });
+    const smsUsers = users.filter(u => u.mobile);
+    const emailUsers = users.filter(u => u.email);
+
+    smsUsers.forEach(
+      async u =>
+        await sendSMS({
+          phoneNumber: u.mobile,
+          message: `The ${variable.text?.toLowerCase()} moisture sensor at Postwick has been triggered`,
+        }),
+    );
+
+    if (emailUsers) {
+      await sendMail({
+        to: emailUsers.map(u => ({ name: `${u.firstName} ${u.lastName}`, address: u.email })),
+        template: "water",
+        subject: "Postwick - Moisture Sensor Triggered!",
+        context: { location: variable.text?.toLowerCase() },
+      });
+    }
   } catch (err) {
     console.error(err);
   }
