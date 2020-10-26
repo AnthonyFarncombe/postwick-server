@@ -861,6 +861,16 @@
     }
   },
   {
+    "name": "numberOfCars",
+    "value": 0,
+    "log": true,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 82
+    }
+  },
+  {
     "name": "mainHallLightsToggle",
     "value": false,
     "toggle": 500,
@@ -1130,6 +1140,15 @@
       "type": "int16",
       "action": "write",
       "byte": 10
+    }
+  },
+  {
+    "name": "meetingSize",
+    "value": 0,
+    "plc": {
+      "type": "int8",
+      "action": "write",
+      "byte": 12
     }
   }
 ]
