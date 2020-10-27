@@ -120,7 +120,7 @@ function processReceiveBuffer(chunk: Buffer): void {
 }
 
 client.on("data", chunk => {
-  const bufferLength = 100;
+  const bufferLength = 255;
 
   if (chunk.length % bufferLength === 0) {
     for (let i = 0; i < chunk.length; i += bufferLength) {

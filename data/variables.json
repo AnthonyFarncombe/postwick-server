@@ -871,6 +871,78 @@
     }
   },
   {
+    "name": "condenser1HoursRun",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 84
+    }
+  },
+  {
+    "name": "condenser2HoursRun",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 86
+    }
+  },
+  {
+    "name": "condenser3HoursRun",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 88
+    }
+  },
+  {
+    "name": "condenser4HoursRun",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 90
+    }
+  },
+  {
+    "name": "condenser5HoursRun",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 92
+    }
+  },
+  {
+    "name": "condenser6HoursRun",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 94
+    }
+  },
+  {
+    "name": "condenser7HoursRun",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 96
+    }
+  },
+  {
+    "name": "condenser8HoursRun",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 98
+    }
+  },
+  {
     "name": "mainHallLightsToggle",
     "value": false,
     "toggle": 500,
@@ -1032,6 +1104,28 @@
       "action": "write",
       "byte": 7,
       "bit": 1
+    }
+  },
+  {
+    "name": "toggleMainFoyerCassettes",
+    "value": false,
+    "toggle": 2000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 7,
+      "bit": 2
+    }
+  },
+  {
+    "name": "toggleSouthFoyerCassettes",
+    "value": false,
+    "toggle": 2000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 7,
+      "bit": 3
     }
   },
   {
