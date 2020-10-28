@@ -1129,6 +1129,17 @@
     }
   },
   {
+    "name": "toggleAhuFans",
+    "value": false,
+    "toggle": 1000,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 7,
+      "bit": 4
+    }
+  },
+  {
     "name": "disableMainDoor1",
     "value": false,
     "toggle": 500,
@@ -1243,6 +1254,16 @@
       "type": "int8",
       "action": "write",
       "byte": 12
+    }
+  },
+  {
+    "name": "toggleCondenserDisable",
+    "value": 0,
+    "toggle": 500,
+    "plc": {
+      "type": "int8",
+      "action": "write",
+      "byte": 13
     }
   }
 ]
