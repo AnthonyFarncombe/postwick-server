@@ -583,6 +583,32 @@
     }
   },
   {
+    "name": "gentsHeater",
+    "text": "Gents Heater",
+    "value": false,
+    "group": "toiletHeaters",
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 62,
+      "bit": 3
+    }
+  },
+  {
+    "name": "ladiesHeater",
+    "text": "Ladies Heater",
+    "value": false,
+    "group": "toiletHeaters",
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 62,
+      "bit": 4
+    }
+  },
+  {
     "name": "condenser1Status",
     "text": "Condenser 1",
     "value": 0,
@@ -943,6 +969,78 @@
     }
   },
   {
+    "name": "extractGentsStatusAdapter",
+    "value": 0,
+    "plc": {
+      "type": "uint16",
+      "action": "read",
+      "byte": 100
+    }
+  },
+  {
+    "name": "extractLadiesStatusAdapter",
+    "value": 0,
+    "plc": {
+      "type": "uint16",
+      "action": "read",
+      "byte": 102
+    }
+  },
+  {
+    "name": "extractGentsErrId",
+    "value": 0,
+    "plc": {
+      "type": "uint16",
+      "action": "read",
+      "byte": 104
+    }
+  },
+  {
+    "name": "extractLadiesErrId",
+    "value": 0,
+    "plc": {
+      "type": "uint16",
+      "action": "read",
+      "byte": 106
+    }
+  },
+  {
+    "name": "extractGentsActlVelo",
+    "value": 0,
+    "plc": {
+      "type": "int32",
+      "action": "read",
+      "byte": 108
+    }
+  },
+  {
+    "name": "extractLadiesActlVelo",
+    "value": 0,
+    "plc": {
+      "type": "int32",
+      "action": "read",
+      "byte": 112
+    }
+  },
+  {
+    "name": "extractGentsAxisStatus",
+    "value": 0,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 116
+    }
+  },
+  {
+    "name": "extractLadiesAxisStatus",
+    "value": 0,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 117
+    }
+  },
+  {
     "name": "mainHallLightsToggle",
     "value": false,
     "toggle": 500,
@@ -1131,12 +1229,34 @@
   {
     "name": "toggleAhuFans",
     "value": false,
-    "toggle": 1000,
+    "toggle": 500,
     "plc": {
       "type": "bool",
       "action": "write",
       "byte": 7,
       "bit": 4
+    }
+  },
+  {
+    "name": "toggleGentsHeater",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 7,
+      "bit": 5
+    }
+  },
+  {
+    "name": "toggleLadiesHeater",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 7,
+      "bit": 6
     }
   },
   {
@@ -1264,6 +1384,28 @@
       "type": "int8",
       "action": "write",
       "byte": 13
+    }
+  },
+  {
+    "name": "toggleExtractGents",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 14,
+      "bit": 0
+    }
+  },
+  {
+    "name": "toggleExtractLadies",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 14,
+      "bit": 1
     }
   }
 ]

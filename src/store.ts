@@ -14,7 +14,7 @@ async function logToDb(variable: Variable): Promise<void> {
 }
 
 interface PlcDataType {
-  type: "bool" | "int8" | "int16";
+  type: "bool" | "int8" | "int16" | "int32" | "uint16";
   action: "read" | "write";
   byte: number;
   bit?: number;

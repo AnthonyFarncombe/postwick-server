@@ -4,6 +4,7 @@ import store, { VariableJson, storeEvents } from "./store";
 
 let readVariables: VariableJson[] = [];
 let writeVariables: VariableJson[] = [];
+let receiveBuffer: Buffer = Buffer.alloc(0);
 
 function loadVariables(): void {
   readVariables = store.variables.filter(v => v.plc && v.plc.action === "read");
@@ -112,21 +113,51 @@ function processReceiveBuffer(chunk: Buffer): void {
     if (v.plc?.type === "bool" && typeof v.plc.bit === "number") {
       v.value = (chunk[v.plc.byte] & (0x1 << v.plc.bit)) > 0x0;
     } else if (v.plc?.type === "int8") {
-      v.value = chunk[v.plc.byte];
+      v.value = chunk.readInt8(v.plc.byte);
     } else if (v.plc?.type === "int16") {
-      v.value = (chunk[v.plc.byte] << 0x8) + chunk[v.plc.byte + 0x1];
+      v.value = chunk.readInt16BE(v.plc.byte);
+    } else if (v.plc?.type === "uint16") {
+      v.value = chunk.readUInt16BE(v.plc.byte);
+    } else if (v.plc?.type === "int32") {
+      v.value = chunk.readInt32BE(v.plc.byte);
     }
   });
 }
 
 client.on("data", chunk => {
-  const bufferLength = 255;
+  let bufferLength = 0;
 
-  if (chunk.length % bufferLength === 0) {
-    for (let i = 0; i < chunk.length; i += bufferLength) {
-      processReceiveBuffer(chunk.subarray(i, i + bufferLength));
-    }
+  if (chunk[0] === 0xfe && chunk[1] === 1) {
+    bufferLength = chunk.readInt16BE(2);
+    receiveBuffer = chunk;
   } else {
-    console.log(chalk.blueBright(chunk.length.toString()) + " " + chalk.redBright(chunk.toString()));
+    receiveBuffer = Buffer.concat([receiveBuffer, chunk]);
+  }
+
+  if (receiveBuffer.length === bufferLength) {
+    if (receiveBuffer[0] !== 0xfe) {
+      console.log(chalk.redBright(`Expected first byte to equal 0xfe but received 0x${receiveBuffer[0].toString(16)}`));
+    } else if (receiveBuffer[1] !== 1) {
+      console.log(chalk.redBright(`Expected version number to equal 1 but received ${receiveBuffer[0]}`));
+    } else if (receiveBuffer[bufferLength - 1] !== 0xfb) {
+      console.log(
+        chalk.redBright(
+          `Expected last byte to equal 0xfb but received 0x${receiveBuffer[bufferLength - 1].toString(16)}`,
+        ),
+      );
+    } else {
+      let checksum = 0;
+      for (let i = 4; i < bufferLength - 2; i++) {
+        checksum = (checksum + receiveBuffer[i]) % 0x100;
+      }
+
+      if (receiveBuffer[bufferLength - 2] !== checksum) {
+        console.log(
+          chalk.redBright(`Expected checksum of ${checksum} but received ${receiveBuffer[bufferLength - 2]}`),
+        );
+      } else {
+        processReceiveBuffer(receiveBuffer);
+      }
+    }
   }
 });
