@@ -41,7 +41,7 @@ router.get("/me", async (req, res) => {
 router.get("/users", async (req, res) => {
   try {
     await getUserFromRequest(req);
-    const users = await User.find({ hmiPin: { $exists: true } });
+    const users = await User.find({ hmiPinConfirmed: true });
     res.json(users.map(u => ({ name: `${u.firstName} ${u.lastName}`, email: u.email })));
   } catch (err) {
     res.json([]);
