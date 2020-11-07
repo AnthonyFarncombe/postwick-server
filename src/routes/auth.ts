@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import handlebars from "handlebars";
 import { v4 as uuidv4 } from "uuid";
 import { isDate } from "lodash";
+import speakeasy from "speakeasy";
 
 import User from "../models/user";
 import RefreshToken from "../models/refreshToken";
@@ -61,13 +62,21 @@ router.post("/login", async (req, res) => {
       ["::1", "127.0.0.1", "::ffff:127.0.0.1"].includes(clientIpAddress) ||
       new RegExp(process.env.HMI_CLIENT_IP || "invalid").test(clientIpAddress);
 
-    if (isLocal && req.body.hmi) {
-      if (req.body.password !== user.hmiPin) {
+    if (isLocal && req.body.hmi && user.hmiPinConfirmed) {
+      const verified = speakeasy.totp.verify({
+        secret: user.hmiPinSecret,
+        encoding: "base32",
+        token: req.body.password,
+        window: 1,
+      });
+
+      if (!verified) {
         res.sendStatus(401);
         return;
       }
     } else {
       const isEqual = await bcrypt.compare(req.body.password, user.passwordHash || "");
+
       if (!isEqual) {
         res.sendStatus(401);
         return;
@@ -201,6 +210,61 @@ router.post("/reset", async (req, res) => {
     return res.sendStatus(200);
   } catch (err) {
     return res.sendStatus(400);
+  }
+});
+
+router.post("/setuphmipin", async (req, res) => {
+  try {
+    const userContext = await getUserFromRequest(req);
+    if (!userContext || !userContext.userId) {
+      return res.sendStatus(401);
+    }
+
+    const user = await User.findById(userContext.userId);
+    if (!user) return res.sendStatus(401);
+
+    const secret = speakeasy.generateSecret({ name: user.email });
+
+    await User.updateOne(
+      { _id: userContext.userId },
+      { $set: { hmiPinSecret: secret.base32, hmiPinConfirmed: false } },
+    );
+
+    return res.json({ secret: secret.otpauth_url + "&issuer=Postwick%20BMS" });
+  } catch (err) {
+    return res.sendStatus(401);
+  }
+});
+
+router.post("/verifyhmipin", async (req, res) => {
+  try {
+    const userContext = await getUserFromRequest(req);
+    if (!userContext || !userContext.userId) {
+      return res.sendStatus(401);
+    }
+
+    const user = await User.findById(userContext.userId);
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
+    const verified = speakeasy.totp.verify({
+      secret: user.hmiPinSecret,
+      encoding: "base32",
+      token: req.body.token,
+      window: 1,
+    });
+    if (verified) {
+      if (req.body.confirm) {
+        user.hmiPinConfirmed = true;
+        await user.save();
+      }
+      return res.sendStatus(200);
+    } else {
+      return res.sendStatus(401);
+    }
+  } catch (err) {
+    return res.sendStatus(401);
   }
 });
 

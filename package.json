@@ -30,6 +30,7 @@
     "mongoose": "^5.10.7",
     "nodemailer": "^6.4.11",
     "socket.io": "^2.3.0",
+    "speakeasy": "^2.0.0",
     "urllib": "^2.36.1",
     "uuid": "^8.3.0"
   },
@@ -43,6 +44,7 @@
     "@types/mongoose": "^5.7.36",
     "@types/nodemailer": "^6.4.0",
     "@types/socket.io": "^2.1.11",
+    "@types/speakeasy": "^2.0.5",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
