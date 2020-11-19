@@ -15,6 +15,7 @@ interface ScheduleSocketType {
   frequency: string;
   startDate?: string;
   overrideDay: boolean;
+  meetingSize: number;
 }
 
 const mapSchedule = (schedule: ScheduleType): ScheduleSocketType => ({
@@ -24,6 +25,7 @@ const mapSchedule = (schedule: ScheduleType): ScheduleSocketType => ({
   frequency: schedule.frequency,
   startDate: schedule.startDate,
   overrideDay: schedule.overrideDay,
+  meetingSize: schedule.meetingSize,
 });
 
 const sessions: Session[] = [];

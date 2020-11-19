@@ -4,8 +4,14 @@ import store, { Variable } from "./store";
 import Schedule from "./models/schedule";
 
 let meetingScheduled: Variable | undefined;
+let meetingSize: Variable | undefined;
 
-export async function isMeetingScheduled(): Promise<boolean> {
+interface ScheduledMeeting {
+  isScheduled: boolean;
+  meetingSize: number;
+}
+
+export async function isMeetingScheduled(): Promise<ScheduledMeeting> {
   try {
     // Get current day of week
     const dayOfWeek: string = dayjs().format("dddd");
@@ -61,10 +67,25 @@ export async function isMeetingScheduled(): Promise<boolean> {
       else break;
     }
 
-    return schedules.length > 0;
+    const schedule = schedules.length > 0 ? schedules[0] : undefined;
+
+    if (schedule) {
+      return {
+        isScheduled: true,
+        meetingSize: schedule.meetingSize,
+      };
+    } else {
+      return {
+        isScheduled: false,
+        meetingSize: 0,
+      };
+    }
   } catch (err) {
     console.log(chalk.red(err));
-    return false;
+    return {
+      isScheduled: false,
+      meetingSize: 0,
+    };
   }
 }
 
@@ -72,13 +93,18 @@ export async function startScheduler(): Promise<void> {
   console.log(chalk.green("Starting scheduler"));
 
   meetingScheduled = store.variables.find(v => v.name === "meetingScheduled");
+  meetingSize = store.variables.find(v => v.name === "meetingSize");
 
-  if (meetingScheduled) {
-    meetingScheduled.value = await isMeetingScheduled();
+  if (meetingScheduled && meetingSize) {
+    const scheduledMeeting = await isMeetingScheduled();
+    meetingScheduled.value = scheduledMeeting.isScheduled;
+    meetingSize.value = scheduledMeeting.isScheduled ? scheduledMeeting.meetingSize : 0;
 
     setInterval(async () => {
-      if (meetingScheduled) {
-        meetingScheduled.value = await isMeetingScheduled();
+      if (meetingScheduled && meetingSize) {
+        const scheduledMeeting = await isMeetingScheduled();
+        meetingScheduled.value = scheduledMeeting.isScheduled;
+        meetingSize.value = scheduledMeeting.isScheduled ? scheduledMeeting.meetingSize : 0;
       }
     }, 1000 * 60);
   } else {

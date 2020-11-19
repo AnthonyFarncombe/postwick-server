@@ -114,6 +114,7 @@
     "text": "Main Hall Lights",
     "group": "insideLights",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -125,6 +126,7 @@
     "text": "Main Foyer Lights",
     "group": "insideLights",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -136,6 +138,7 @@
     "text": "South Foyer Lights",
     "group": "insideLights",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -147,6 +150,7 @@
     "text": "North Foyer Lights",
     "group": "insideLights",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -158,6 +162,7 @@
     "text": "Toilet Lights",
     "group": "insideLights",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -169,6 +174,7 @@
     "text": "Rear Corridor Lights",
     "group": "insideLights",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -180,6 +186,7 @@
     "text": "Plant Room Lights",
     "group": "insideLights",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -191,6 +198,7 @@
     "text": "Building Lights",
     "group": "outsideLights",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -202,6 +210,7 @@
     "text": "Car Park Lights",
     "group": "outsideLights",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -367,6 +376,7 @@
     "text": "Main Door 1",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -378,6 +388,7 @@
     "text": "Main Door 2",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -389,6 +400,7 @@
     "text": "Main Door 3",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -400,6 +412,7 @@
     "text": "Main Door 4",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -411,6 +424,7 @@
     "text": "Main Door 5",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -422,6 +436,7 @@
     "text": "Main Door 6",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -433,6 +448,7 @@
     "text": "North Sliding Door",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -444,6 +460,7 @@
     "text": "South Exit Door 1",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -455,6 +472,7 @@
     "text": "South Exit Door 2",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -466,6 +484,7 @@
     "text": "Side Entrance Door",
     "value": 0,
     "group": "doors",
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -612,8 +631,8 @@
     "name": "condenser1Status",
     "text": "Condenser 1",
     "value": 0,
-    "log": true,
     "group": "condensers",
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -624,8 +643,8 @@
     "name": "condenser2Status",
     "text": "Condenser 2",
     "value": 0,
-    "log": true,
     "group": "condensers",
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -636,8 +655,8 @@
     "name": "condenser3Status",
     "text": "Condenser 3",
     "value": 0,
-    "log": true,
     "group": "condensers",
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -648,8 +667,8 @@
     "name": "condenser4Status",
     "text": "Condenser 4",
     "value": 0,
-    "log": true,
     "group": "condensers",
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -660,8 +679,8 @@
     "name": "condenser5Status",
     "text": "Condenser 5",
     "value": 0,
-    "log": true,
     "group": "condensers",
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -672,8 +691,8 @@
     "name": "condenser6Status",
     "text": "Condenser 6",
     "value": 0,
-    "log": true,
     "group": "condensers",
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -684,8 +703,8 @@
     "name": "condenser7Status",
     "text": "Condenser 7",
     "value": 0,
-    "log": true,
     "group": "condensers",
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -696,8 +715,8 @@
     "name": "condenser8Status",
     "text": "Condenser 8",
     "value": 0,
-    "log": true,
     "group": "condensers",
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -708,8 +727,8 @@
     "name": "supplyAir1Fault",
     "text": "Supply Air 1",
     "value": false,
-    "log": true,
     "group": "fans",
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -721,8 +740,8 @@
     "name": "supplyAir2Fault",
     "text": "Supply Air 2",
     "value": false,
-    "log": true,
     "group": "fans",
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -734,8 +753,8 @@
     "name": "supplyAir3Fault",
     "text": "Supply Air 3",
     "value": false,
-    "log": true,
     "group": "fans",
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -747,8 +766,8 @@
     "name": "supplyAir4Fault",
     "text": "Supply Air 4",
     "value": false,
-    "log": true,
     "group": "fans",
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -760,8 +779,8 @@
     "name": "returnAir1Fault",
     "text": "Return Air 1",
     "value": false,
-    "log": true,
     "group": "fans",
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -773,8 +792,8 @@
     "name": "returnAir2Fault",
     "text": "Return Air 2",
     "value": false,
-    "log": true,
     "group": "fans",
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -786,8 +805,8 @@
     "name": "returnAir3Fault",
     "text": "Return Air 3",
     "value": false,
-    "log": true,
     "group": "fans",
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -799,8 +818,8 @@
     "name": "returnAir4Fault",
     "text": "Return Air 4",
     "value": false,
-    "log": true,
     "group": "fans",
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "read",
@@ -811,6 +830,7 @@
   {
     "name": "supplyAirCommand",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -820,6 +840,7 @@
   {
     "name": "returnAirCommand",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -899,6 +920,7 @@
   {
     "name": "condenser1HoursRun",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -908,6 +930,7 @@
   {
     "name": "condenser2HoursRun",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -917,6 +940,7 @@
   {
     "name": "condenser3HoursRun",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -926,6 +950,7 @@
   {
     "name": "condenser4HoursRun",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -935,6 +960,7 @@
   {
     "name": "condenser5HoursRun",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -944,6 +970,7 @@
   {
     "name": "condenser6HoursRun",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -953,6 +980,7 @@
   {
     "name": "condenser7HoursRun",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -962,6 +990,7 @@
   {
     "name": "condenser8HoursRun",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "read",
@@ -971,6 +1000,7 @@
   {
     "name": "extractGentsStatusAdapter",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "uint16",
       "action": "read",
@@ -980,6 +1010,7 @@
   {
     "name": "extractLadiesStatusAdapter",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "uint16",
       "action": "read",
@@ -989,6 +1020,7 @@
   {
     "name": "extractGentsErrId",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "uint16",
       "action": "read",
@@ -998,6 +1030,7 @@
   {
     "name": "extractLadiesErrId",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "uint16",
       "action": "read",
@@ -1007,6 +1040,7 @@
   {
     "name": "extractGentsActlVelo",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int32",
       "action": "read",
@@ -1016,6 +1050,7 @@
   {
     "name": "extractLadiesActlVelo",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int32",
       "action": "read",
@@ -1025,6 +1060,7 @@
   {
     "name": "extractGentsAxisStatus",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -1034,6 +1070,7 @@
   {
     "name": "extractLadiesAxisStatus",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "read",
@@ -1177,6 +1214,7 @@
   {
     "name": "waterSolenoidMode",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "write",
@@ -1197,6 +1235,7 @@
   {
     "name": "meetingScheduled",
     "value": false,
+    "log": true,
     "plc": {
       "type": "bool",
       "action": "write",
@@ -1361,6 +1400,8 @@
   {
     "name": "hvacSetPoint",
     "value": 180,
+    "persist": true,
+    "log": true,
     "plc": {
       "type": "int16",
       "action": "write",
@@ -1370,6 +1411,7 @@
   {
     "name": "meetingSize",
     "value": 0,
+    "log": true,
     "plc": {
       "type": "int8",
       "action": "write",

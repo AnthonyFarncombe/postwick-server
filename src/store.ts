@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import chalk from "chalk";
 import { EventEmitter } from "events";
+import Persist from "./models/persist";
 import VariableLog from "./models/variableLog";
 
 export type VariableValueType = boolean | number;
@@ -26,6 +27,7 @@ export interface VariableJson {
   value: VariableValueType;
   toggle?: number;
   group?: string;
+  persist?: boolean;
   log?: boolean;
   plc?: PlcDataType;
 }
@@ -40,6 +42,7 @@ export class Variable {
   private _toggle?: number;
   private _toggleTimeout?: NodeJS.Timeout;
   public readonly group?: string;
+  public readonly persist?: boolean;
   public readonly log?: boolean;
   public plc?: PlcDataType;
 
@@ -49,6 +52,7 @@ export class Variable {
     value,
     toggle,
     group,
+    persist,
     log,
     plc,
   }: {
@@ -57,6 +61,7 @@ export class Variable {
     value: VariableValueType;
     toggle?: number;
     group?: string;
+    persist?: boolean;
     log?: boolean;
     plc?: PlcDataType;
   }) {
@@ -66,6 +71,7 @@ export class Variable {
     this._defaultValue = value;
     this._toggle = toggle;
     this.group = group;
+    this.persist = persist;
     this.log = log;
     this.plc = plc;
   }
@@ -87,6 +93,28 @@ export class Variable {
     if (newValue === this._value) return;
     this._value = newValue;
 
+    if (this.persist) {
+      let persistValue = 0;
+      if (typeof newValue === "boolean") {
+        persistValue = newValue ? 1 : 0;
+      } else {
+        persistValue = newValue as number;
+      }
+
+      Persist.findOne({ name: this.name })
+        .then(persist => {
+          if (persist) {
+            return Persist.updateOne({ name: this.name }, { $set: { value: persistValue } });
+          } else {
+            const newPersist = new Persist({ name: this.name, value: persistValue });
+            return newPersist.save();
+          }
+        })
+        .catch(() => {
+          console.log(chalk.red(`Unable to persist variable ${this.name} with value ${newValue}`));
+        });
+    }
+
     storeEvents.emit("valueChanged", this);
     if (this.log) logToDb(this);
 
@@ -104,21 +132,35 @@ export function load(): Promise<void> {
     let variablesFileName = path.resolve(__dirname, "variables.json");
     if (!fs.existsSync(variablesFileName)) variablesFileName = path.resolve(__dirname, "../data", "variables.json");
 
-    fs.readFile(variablesFileName, "utf8", (err, data) => {
+    fs.readFile(variablesFileName, "utf8", async (err, data) => {
       if (err) {
         console.log(chalk.red(err.message));
       } else {
         try {
           const jsonData: VariableJson[] = JSON.parse(data);
 
+          const persistVars = await Persist.find();
+
           jsonData.forEach(v => {
+            const persistVar = persistVars.find(x => x.name === v.name);
+
+            let value: VariableValueType = v.value;
+            if (persistVar) {
+              if (typeof v.value === "boolean") {
+                value = !!persistVar.value;
+              } else {
+                value = persistVar.value as VariableValueType;
+              }
+            }
+
             variables.push(
               new Variable({
                 name: v.name,
                 text: v.text,
-                value: v.value,
+                value,
                 toggle: v.toggle,
                 group: v.group,
+                persist: v.persist,
                 log: v.log,
                 plc: v.plc,
               }),
