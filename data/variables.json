@@ -1078,6 +1078,15 @@
     }
   },
   {
+    "name": "fanSpeedAuto",
+    "value": 0,
+    "plc": {
+      "type": "int16",
+      "action": "read",
+      "byte": 118
+    }
+  },
+  {
     "name": "mainHallLightsToggle",
     "value": false,
     "toggle": 500,
@@ -1448,6 +1457,27 @@
       "action": "write",
       "byte": 14,
       "bit": 1
+    }
+  },
+  {
+    "name": "fanSpeedOverride",
+    "value": false,
+    "persist": true,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 15,
+      "bit": 0
+    }
+  },
+  {
+    "name": "fanSpeedManual",
+    "value": 0,
+    "persist": true,
+    "plc": {
+      "type": "int16",
+      "action": "write",
+      "byte": 16
     }
   }
 ]

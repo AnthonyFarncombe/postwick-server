@@ -98,13 +98,13 @@ export async function startScheduler(): Promise<void> {
   if (meetingScheduled && meetingSize) {
     const scheduledMeeting = await isMeetingScheduled();
     meetingScheduled.value = scheduledMeeting.isScheduled;
-    meetingSize.value = scheduledMeeting.isScheduled ? scheduledMeeting.meetingSize : 0;
+    if (scheduledMeeting.isScheduled) meetingSize.value = scheduledMeeting.meetingSize;
 
     setInterval(async () => {
       if (meetingScheduled && meetingSize) {
         const scheduledMeeting = await isMeetingScheduled();
         meetingScheduled.value = scheduledMeeting.isScheduled;
-        meetingSize.value = scheduledMeeting.isScheduled ? scheduledMeeting.meetingSize : 0;
+        if (scheduledMeeting.isScheduled) meetingSize.value = scheduledMeeting.meetingSize;
       }
     }, 1000 * 60);
   } else {
