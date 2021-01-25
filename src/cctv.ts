@@ -26,8 +26,8 @@ export async function getCCTVImage(): Promise<ImageWithNames> {
   const jimpImage = await Jimp.read(data);
 
   jimpImage.crop(
-    jimpImage.getWidth() * 0.32,
-    jimpImage.getHeight() * 0.3,
+    jimpImage.getWidth() * 0.25,
+    jimpImage.getHeight() * 0.35,
     jimpImage.getWidth() * 0.25,
     jimpImage.getHeight() * 0.25,
   );

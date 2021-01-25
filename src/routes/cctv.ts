@@ -1,39 +1,41 @@
 import express from "express";
 import path from "path";
-import { getCCTVImage, getGateFaceImage } from "../cctv";
+import fs from "fs";
+// import { getCCTVImage, getGateFaceImage } from "../cctv";
 import { getPlateFromImage } from "../anpr";
-import Visit from "../models/visit";
+import { getCCTVImage } from "../cctv";
+// import Visit from "../models/visit";
 
 const router = express.Router();
 
-router.get("/:type?/:id?", async (req, res) => {
-  try {
-    if (req.params.type && /^(orig|cropped|face)$/.test(req.params.type) && req.params.id) {
-      const visit = await Visit.findById(req.params.id);
-      if (visit) {
-        const filename = req.params.type === "cropped" ? visit.imageNameCropped : visit.imageNameOrig;
-        if (filename && process.env.CCTV_ARCHIVE) {
-          res.sendFile(path.resolve(process.env.CCTV_ARCHIVE, filename));
-        } else {
-          res.sendStatus(404);
-        }
-      } else {
-        res.sendStatus(404);
-        return;
-      }
-    } else if (req.params.type === "face") {
-      const image = await getGateFaceImage();
-      res.contentType("image/jpeg");
-      res.send(image);
-    } else {
-      const image = await getCCTVImage();
-      res.contentType("image/jpeg");
-      res.send(image);
-    }
-  } catch (err) {
-    res.json(err);
-  }
-});
+// router.get("/:type?/:id?", async (req, res) => {
+//   try {
+//     if (req.params.type && /^(orig|cropped|face)$/.test(req.params.type) && req.params.id) {
+//       const visit = await Visit.findById(req.params.id);
+//       if (visit) {
+//         const filename = req.params.type === "cropped" ? visit.imageNameCropped : visit.imageNameOrig;
+//         if (filename && process.env.CCTV_ARCHIVE) {
+//           res.sendFile(path.resolve(process.env.CCTV_ARCHIVE, filename));
+//         } else {
+//           res.sendStatus(404);
+//         }
+//       } else {
+//         res.sendStatus(404);
+//         return;
+//       }
+//     } else if (req.params.type === "face") {
+//       const image = await getGateFaceImage();
+//       res.contentType("image/jpeg");
+//       res.send(image);
+//     } else {
+//       const image = await getCCTVImage();
+//       res.contentType("image/jpeg");
+//       res.send(image);
+//     }
+//   } catch (err) {
+//     res.json(err);
+//   }
+// });
 
 router.get("/anpr", async (_req, res) => {
   try {
@@ -43,6 +45,21 @@ router.get("/anpr", async (_req, res) => {
   } catch (err) {
     res.json(err);
   }
+});
+
+router.get("/image/:name", async (req, res) => {
+  if (!process.env.CCTV_ARCHIVE) {
+    res.sendStatus(404);
+    return;
+  }
+
+  const imageFile = path.resolve(process.env.CCTV_ARCHIVE, req.params.name);
+  if (!fs.existsSync(imageFile)) {
+    res.sendStatus(404);
+    return;
+  }
+
+  res.sendFile(imageFile);
 });
 
 export default router;

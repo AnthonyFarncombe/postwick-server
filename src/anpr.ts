@@ -24,12 +24,12 @@ async function getImage(carId: string, attempts = 3): Promise<ImageWithNames> {
 }
 
 function adjustPlate(plateText: string): string {
-  if (!plateText) return plateText;
+  if (!plateText) throw new Error("No plate text found!");
   plateText = plateText.toUpperCase();
 
-  const match = /\w{4}\s\w{3}/.exec(plateText);
-  if (match && match.length) plateText = match[0];
-  else return plateText;
+  plateText = plateText.replace(" ", "");
+
+  if (plateText.length !== 7) throw new Error(`Expected plate text of 7 characters but found ${plateText.length}!`);
 
   if (plateText.substr(0, 1) === "0") plateText = `O${plateText.substr(1)}`;
   if (plateText.substr(0, 1) === "1") plateText = `I${plateText.substr(1)}`;
@@ -39,12 +39,16 @@ function adjustPlate(plateText: string): string {
   if (plateText.substr(2, 1) === "I") plateText = `${plateText.substr(0, 2)}1${plateText.substr(3)}`;
   if (plateText.substr(3, 1) === "O") plateText = `${plateText.substr(0, 3)}0${plateText.substr(4)}`;
   if (plateText.substr(3, 1) === "I") plateText = `${plateText.substr(0, 3)}1${plateText.substr(4)}`;
+  if (plateText.substr(4, 1) === "0") plateText = `${plateText.substr(0, 4)}O${plateText.substr(5)}`;
+  if (plateText.substr(4, 1) === "1") plateText = `${plateText.substr(0, 4)}I${plateText.substr(5)}`;
   if (plateText.substr(5, 1) === "0") plateText = `${plateText.substr(0, 5)}O${plateText.substr(6)}`;
   if (plateText.substr(5, 1) === "1") plateText = `${plateText.substr(0, 5)}I${plateText.substr(6)}`;
-  if (plateText.substr(6, 1) === "0") plateText = `${plateText.substr(0, 6)}O${plateText.substr(7)}`;
-  if (plateText.substr(6, 1) === "1") plateText = `${plateText.substr(0, 6)}I${plateText.substr(7)}`;
-  if (plateText.substr(7, 1) === "0") plateText = `${plateText.substr(0, 7)}O`;
-  if (plateText.substr(7, 1) === "1") plateText = `${plateText.substr(0, 7)}I`;
+  if (plateText.substr(6, 1) === "0") plateText = `${plateText.substr(0, 6)}O`;
+  if (plateText.substr(6, 1) === "1") plateText = `${plateText.substr(0, 6)}I`;
+
+  plateText = plateText.substr(0, 4) + " " + plateText.substr(4);
+
+  if (!/[A-Z]{2}\d{2}\s[A-Z]{3}/.test(plateText)) throw new Error("Invalid characters in plate!");
 
   return plateText;
 }

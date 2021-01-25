@@ -22,7 +22,7 @@ const transformUser = (user: UserType): UserJson => ({
   notifications: user.notifications,
 });
 
-router.get("/roles", (_req, res) => res.json(["users"]));
+router.get("/roles", (_req, res) => res.json(["anpr", "users"]));
 
 router.get("/notifications", (_req, res) => res.json(["alarm", "anpr", "water"]));
 
@@ -49,6 +49,7 @@ router.post("/", async (req, res) => {
 
   try {
     const savedUser = await user.save();
+
     return res.json(transformUser(savedUser));
   } catch (e) {
     return res.sendStatus(400);
@@ -78,6 +79,15 @@ router.put("/:id", async (req, res) => {
     }
   } catch (err) {
     res.sendStatus(400);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(404);
   }
 });
 

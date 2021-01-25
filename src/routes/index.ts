@@ -2,6 +2,7 @@ import express from "express";
 
 import { authMiddleware } from "../auth";
 
+import anpr from "./anpr";
 import auth from "./auth";
 import cctv from "./cctv";
 import users from "./users";
@@ -14,6 +15,7 @@ router.get("/", (req, res) => {
   res.send(ip);
 });
 
+router.use("/anpr", authMiddleware("anpr"), anpr);
 router.use("/auth", auth);
 router.use("/cctv", cctv);
 router.use("/users", authMiddleware("users"), users);
