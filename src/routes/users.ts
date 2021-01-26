@@ -14,7 +14,7 @@ interface UserJson {
 }
 
 const transformUser = (user: UserType): UserJson => ({
-  id: user._id,
+  id: user.id,
   firstName: user.firstName,
   lastName: user.lastName,
   email: user.email,
@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
     const savedUser = await user.save();
 
     return res.json(transformUser(savedUser));
-  } catch (e) {
+  } catch (err) {
     return res.sendStatus(400);
   }
 });

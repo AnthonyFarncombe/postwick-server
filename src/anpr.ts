@@ -46,9 +46,7 @@ function adjustPlate(plateText: string): string {
   if (plateText.substr(6, 1) === "0") plateText = `${plateText.substr(0, 6)}O`;
   if (plateText.substr(6, 1) === "1") plateText = `${plateText.substr(0, 6)}I`;
 
-  plateText = plateText.substr(0, 4) + " " + plateText.substr(4);
-
-  if (!/[A-Z]{2}\d{2}\s[A-Z]{3}/.test(plateText)) throw new Error("Invalid characters in plate!");
+  if (!/[A-Z]{2}\d{2}[A-Z]{3}/.test(plateText)) throw new Error("Invalid characters in plate!");
 
   return plateText;
 }
@@ -130,7 +128,6 @@ storeEvents.on("valueChanged", async (variable: Variable) => {
 
             visit.approved = true;
             visit.name = car.name;
-            visit.mobile = car.mobile;
             await visit.save();
           }
         }

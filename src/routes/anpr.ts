@@ -1,32 +1,33 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-import Car from "../models/car";
+import Car, { CarType } from "../models/car";
 import Visit from "../models/visit";
 
 const router = express.Router();
 
+interface CarJson {
+  id: string;
+  plateText: string;
+  name?: string;
+  vehicleType?: string;
+}
+
+const transformCar = (car: CarType): CarJson => ({
+  id: car.id,
+  plateText: car.plateText,
+  name: car.name,
+  vehicleType: car.vehicleType,
+});
+
 router.get("/cars", async (_req, res) => {
   const cars = await Car.find();
-  const carsMapped = cars.map(c => ({ id: c.id, plateText: c.plateText, name: c.name, visits: 0, lastVisit: null }));
-
-  const visits = await Visit.aggregate([
-    { $group: { _id: "$plateText", num: { $sum: 1 }, lastVisit: { $max: "$timestamp" } } },
-  ]);
-
-  carsMapped.forEach(c => {
-    const visit = visits.find(v => v._id === c.plateText);
-    if (visit) {
-      c.visits = visit.num;
-      c.lastVisit = visit.lastVisit;
-    }
-  });
-
+  const carsMapped = cars.map(c => transformCar(c));
   res.json(carsMapped);
 });
 
 router.get("/visits", async (_req, res) => {
-  const visits = await Visit.find();
+  const visits = await Visit.find().sort({ timestamp: -1 });
 
   const visitsMapped = visits.map(v => ({
     id: v.id,
@@ -54,6 +55,67 @@ router.get("/image/:name", (req, res) => {
   }
 
   res.sendFile(imageFile);
+});
+
+router.post("/car", async (req, res) => {
+  const plateText = (req.body.plateText || "").replace(" ", "").toUpperCase();
+  if (!plateText || !/^[A-Z]{2}\d{2}[A-Z]{3}$/.test(plateText)) {
+    res.sendStatus(400);
+    return;
+  }
+
+  const car = new Car({
+    plateText,
+    name: req.body.name,
+    vehicleType: req.body.vehicleType,
+  });
+
+  try {
+    const savedCar = await car.save();
+
+    res.json(transformCar(savedCar));
+  } catch (err) {
+    res.sendStatus(400);
+  }
+});
+
+router.put("/car/:id", async (req, res) => {
+  try {
+    const plateText = (req.body.plateText || "").replace(" ", "").toUpperCase();
+    if (!plateText || !/^[A-Z]{2}\d{2}[A-Z]{3}$/.test(plateText)) {
+      res.sendStatus(400);
+      return;
+    }
+
+    const car = await Car.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          plateText,
+          name: req.body.name,
+          vehicleType: req.body.vehicleType,
+        },
+      },
+      { new: true },
+    );
+
+    if (car) {
+      res.json(transformCar(car));
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    res.sendStatus(400);
+  }
+});
+
+router.delete("/car/:id", async (req, res) => {
+  try {
+    await Car.findByIdAndDelete(req.params.id);
+    res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(404);
+  }
 });
 
 export default router;

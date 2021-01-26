@@ -9,7 +9,7 @@ export interface VisitType extends Document {
   plateText?: string;
   approved: boolean;
   name?: string;
-  mobile?: string;
+  vehicleType?: string;
 }
 
 const visitSchema: Schema = new Schema({
@@ -21,7 +21,7 @@ const visitSchema: Schema = new Schema({
   plateText: { type: String, required: false },
   approved: { type: Boolean, required: true },
   name: { type: String, required: false },
-  mobile: { type: String, required: false },
+  vehicleType: { type: String, required: false },
 });
 
 export default mongoose.model<VisitType>("Visit", visitSchema);
