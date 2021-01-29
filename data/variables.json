@@ -492,6 +492,26 @@
     }
   },
   {
+    "name": "gateCloseCmd",
+    "value": 0,
+    "log": true,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 58
+    }
+  },
+  {
+    "name": "gateOpenCmd",
+    "value": 0,
+    "log": true,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 59
+    }
+  },
+  {
     "name": "gateClosed",
     "value": false,
     "log": true,
