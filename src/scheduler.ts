@@ -4,7 +4,7 @@ import store, { Variable } from "./store";
 import Schedule from "./models/schedule";
 
 let meetingScheduled: Variable | undefined;
-let meetingSize: Variable | undefined;
+let scheduledMeetingSize: Variable | undefined;
 
 interface ScheduledMeeting {
   isScheduled: boolean;
@@ -93,18 +93,18 @@ export async function startScheduler(): Promise<void> {
   console.log(chalk.green("Starting scheduler"));
 
   meetingScheduled = store.variables.find(v => v.name === "meetingScheduled");
-  meetingSize = store.variables.find(v => v.name === "meetingSize");
+  scheduledMeetingSize = store.variables.find(v => v.name === "scheduledMeetingSize");
 
-  if (meetingScheduled && meetingSize) {
+  if (meetingScheduled && scheduledMeetingSize) {
     const scheduledMeeting = await isMeetingScheduled();
     meetingScheduled.value = scheduledMeeting.isScheduled;
-    if (scheduledMeeting.isScheduled) meetingSize.value = scheduledMeeting.meetingSize;
+    if (scheduledMeeting.isScheduled) scheduledMeetingSize.value = scheduledMeeting.meetingSize;
 
     setInterval(async () => {
-      if (meetingScheduled && meetingSize) {
+      if (meetingScheduled && scheduledMeetingSize) {
         const scheduledMeeting = await isMeetingScheduled();
         meetingScheduled.value = scheduledMeeting.isScheduled;
-        if (scheduledMeeting.isScheduled) meetingSize.value = scheduledMeeting.meetingSize;
+        if (scheduledMeeting.isScheduled) scheduledMeetingSize.value = scheduledMeeting.meetingSize;
       }
     }, 1000 * 60);
   } else {

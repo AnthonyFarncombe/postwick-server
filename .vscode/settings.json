@@ -18,6 +18,7 @@
         "noreply",
         "otpauth",
         "postwick",
+        "recirc",
         "sendmail",
         "setuphmipin",
         "smtp",

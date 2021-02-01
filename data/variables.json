@@ -1107,6 +1107,86 @@
     }
   },
   {
+    "name": "exhaustDamperStatus",
+    "text": "Exhaust Damper",
+    "value": 0,
+    "group": "dampers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 120
+    }
+  },
+  {
+    "name": "recircDamperStatus",
+    "text": "Recirc Damper",
+    "value": 0,
+    "group": "dampers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 121
+    }
+  },
+  {
+    "name": "freshAirDamperStatus",
+    "text": "Fresh Air Damper",
+    "value": 0,
+    "group": "dampers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 122
+    }
+  },
+  {
+    "name": "freeCoolingDamperStatus",
+    "text": "Free Cooling Damper",
+    "value": 0,
+    "group": "dampers",
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 123
+    }
+  },
+  {
+    "name": "exhaustDamperCmd",
+    "value": 0,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 124
+    }
+  },
+  {
+    "name": "recircDamperCmd",
+    "value": 0,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 125
+    }
+  },
+  {
+    "name": "freshAirDamperCmd",
+    "value": 0,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 126
+    }
+  },
+  {
+    "name": "freeCoolingDamperCmd",
+    "value": 0,
+    "plc": {
+      "type": "int8",
+      "action": "read",
+      "byte": 127
+    }
+  },
+  {
     "name": "mainHallLightsToggle",
     "value": false,
     "toggle": 500,
@@ -1328,6 +1408,17 @@
     }
   },
   {
+    "name": "toggleCondensers",
+    "value": false,
+    "toggle": 500,
+    "plc": {
+      "type": "bool",
+      "action": "write",
+      "byte": 7,
+      "bit": 7
+    }
+  },
+  {
     "name": "disableMainDoor1",
     "value": false,
     "toggle": 500,
@@ -1498,6 +1589,16 @@
       "type": "int16",
       "action": "write",
       "byte": 16
+    }
+  },
+  {
+    "name": "scheduledMeetingSize",
+    "value": 0,
+    "log": true,
+    "plc": {
+      "type": "int8",
+      "action": "write",
+      "byte": 18
     }
   }
 ]
