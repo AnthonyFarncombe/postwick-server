@@ -8,6 +8,20 @@
 <body>
   <div>
     <h4>The {{ type }} alarm has been triggered at Postwick!</h4>
+
+    {{#if suspect}}
+      {{#with suspect}}
+        {{#if name && vehicleType}}
+          <p>{{ name }} entered the car park {{ timeFromNow }} earlier in the {{ vehicleType }} so may be the prime suspect.</p>
+        {{else if name}}
+          <p>{{ name }} entered the car park {{ timeFromNow }} earlier so may be the prime suspect.</p>
+        {{else if plateText}}
+          <p>Someone entered the car park {{ timeFromNow }} earlier in a vehicle with registration {{ plateText }} so may be the prime suspect.</p>
+        {{else}}
+          <p>Someone arrived at the car park {{ timeFromNow }} earlier so may be the prime suspect.</p>
+        {{/if}}
+      {{/with}}
+    {{/if}}
   </div>
 </body>
 
