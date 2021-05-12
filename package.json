@@ -26,7 +26,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.10.7",
-    "nodemailer": "^6.4.11",
+    "nodemailer": "^6.4.16",
     "socket.io": "^2.3.0",
     "speakeasy": "^2.0.0",
     "urllib": "^2.36.1",
