@@ -3,30 +3,11 @@ import { Server } from "http";
 import chalk from "chalk";
 import store, { storeEvents, Variable } from "./store";
 import Schedule, { ScheduleType } from "./models/schedule";
+import { getSchedules } from "./scheduler";
 
 interface Session {
   socket: socket.Socket;
 }
-
-interface ScheduleSocketType {
-  id: string;
-  dayOfWeek: string;
-  timeOfMeeting: string;
-  frequency: string;
-  startDate?: string;
-  overrideDay: boolean;
-  meetingSize: number;
-}
-
-const mapSchedule = (schedule: ScheduleType): ScheduleSocketType => ({
-  id: schedule.id,
-  dayOfWeek: schedule.dayOfWeek,
-  timeOfMeeting: schedule.timeOfMeeting,
-  frequency: schedule.frequency,
-  startDate: schedule.startDate,
-  overrideDay: schedule.overrideDay,
-  meetingSize: schedule.meetingSize,
-});
 
 const sessions: Session[] = [];
 
@@ -73,15 +54,14 @@ export default (http: Server): void => {
       }, 500);
     });
 
-    socket.on("getSchedules", (_data: object, fn: Function) => {
-      Schedule.find((err, res) => {
-        if (err) {
-          console.log(chalk.red("Error loading schedules"));
-          fn && typeof fn === "function" && fn([]);
-        } else {
-          fn && typeof fn === "function" && fn(res.map(s => mapSchedule(s)));
-        }
-      });
+    socket.on("getSchedules", async (_data: object, fn: Function) => {
+      try {
+        const schedules = await getSchedules();
+        fn && typeof fn === "function" && fn(schedules);
+      } catch (err) {
+        console.log(chalk.red("Error loading schedules"));
+        fn && typeof fn === "function" && fn([]);
+      }
     });
 
     socket.on("saveSchedule", async (data: ScheduleType, fn: Function) => {
@@ -105,18 +85,17 @@ export default (http: Server): void => {
           await schedule.save();
           fn && typeof fn === "function" && fn(schedule);
         }
-
-        Schedule.find((err, res) => {
-          if (err) console.log(chalk.red("Error loading schedules"));
-          else
-            socket.emit(
-              "schedulesUpdated",
-              res.map(s => mapSchedule(s)),
-            );
-        });
       } catch (err) {
         console.error(err);
         fn && typeof fn === "function" && fn(err);
+      }
+
+      try {
+        // Push new schedules to clients
+        const schedules = await getSchedules();
+        socket.emit("schedulesUpdated", schedules);
+      } catch (err) {
+        console.log(chalk.red("Error loading schedules"));
       }
     });
 
@@ -133,14 +112,13 @@ export default (http: Server): void => {
         fn && typeof fn === "function" && fn(err);
       }
 
-      Schedule.find((err, res) => {
-        if (err) console.log(chalk.red("Error loading schedules"));
-        else
-          socket.emit(
-            "schedulesUpdated",
-            res.map(s => mapSchedule(s)),
-          );
-      });
+      try {
+        // Push new schedules to clients
+        const schedules = await getSchedules();
+        socket.emit("schedulesUpdated", schedules);
+      } catch (err) {
+        console.log(chalk.red("Error loading schedules"));
+      }
     });
 
     socket.on("disconnect", () => {

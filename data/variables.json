@@ -1600,5 +1600,14 @@
       "action": "write",
       "byte": 18
     }
+  },
+  {
+    "name": "minutesUntilNextMeeting",
+    "value": -100,
+    "plc": {
+      "type": "int16",
+      "action": "write",
+      "byte": 20
+    }
   }
 ]

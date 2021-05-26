@@ -37,8 +37,10 @@ function adjustPlate(plateText: string): string {
   if (plateText.substr(1, 1) === "1") plateText = `${plateText.substr(0, 1)}I${plateText.substr(2)}`;
   if (plateText.substr(2, 1) === "O") plateText = `${plateText.substr(0, 2)}0${plateText.substr(3)}`;
   if (plateText.substr(2, 1) === "I") plateText = `${plateText.substr(0, 2)}1${plateText.substr(3)}`;
+  if (plateText.substr(2, 1) === "B") plateText = `${plateText.substr(0, 2)}8${plateText.substr(3)}`;
   if (plateText.substr(3, 1) === "O") plateText = `${plateText.substr(0, 3)}0${plateText.substr(4)}`;
   if (plateText.substr(3, 1) === "I") plateText = `${plateText.substr(0, 3)}1${plateText.substr(4)}`;
+  if (plateText.substr(3, 1) === "B") plateText = `${plateText.substr(0, 3)}8${plateText.substr(4)}`;
   if (plateText.substr(4, 1) === "0") plateText = `${plateText.substr(0, 4)}O${plateText.substr(5)}`;
   if (plateText.substr(4, 1) === "1") plateText = `${plateText.substr(0, 4)}I${plateText.substr(5)}`;
   if (plateText.substr(5, 1) === "0") plateText = `${plateText.substr(0, 5)}O${plateText.substr(6)}`;
