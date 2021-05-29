@@ -143,7 +143,7 @@ export async function getMinutesUntilNextMeeting(): Promise<{ minutes: number; s
       size: nextSchedule.meetingSize,
     };
   }
-  return { minutes: -100, size: 0 };
+  return { minutes: -100, size: 1 };
 }
 
 export async function startScheduler(): Promise<void> {
@@ -163,7 +163,7 @@ export async function startScheduler(): Promise<void> {
         scheduledMeetingSize.value = nextSchedule.meetingSize;
       } else {
         minutesUntilNextMeeting.value = -100;
-        scheduledMeetingSize.value = 0;
+        scheduledMeetingSize.value = 1; // Maintenance
       }
     };
 

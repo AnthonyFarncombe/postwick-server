@@ -361,6 +361,19 @@
     }
   },
   {
+    "name": "moistureSensorWaterSupply",
+    "text": "Water Supply",
+    "group": "water",
+    "value": false,
+    "log": true,
+    "plc": {
+      "type": "bool",
+      "action": "read",
+      "byte": 36,
+      "bit": 6
+    }
+  },
+  {
     "name": "waterSolenoidStatus",
     "value": false,
     "log": true,
